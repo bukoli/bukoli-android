@@ -1,9 +1,5 @@
 package com.mobillium.bukoliandroidsdk.utils.patternedtextwatcher;
 
-/**
- * * <p>Operations on {@link String} that are
- * {@code null} safe.</p>
- */
 final class StringUtils {
 
   /**

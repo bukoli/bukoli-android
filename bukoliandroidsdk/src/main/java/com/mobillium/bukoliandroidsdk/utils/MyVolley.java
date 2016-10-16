@@ -7,11 +7,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
 
-/**
- * Helper class that is used to provide references to initialized
- * RequestQueue(s) and ImageLoader(s)
- *
- */
+
 public class MyVolley {
     private RequestQueue mRequestQueue;
     private ImageLoader mImageLoader;
@@ -36,13 +32,7 @@ public class MyVolley {
         }
     }
 
-    /**
-     * Returns instance of ImageLoader initialized with {@see FakeImageCache}
-     * which effectively means that no memory caching is used. This is useful
-     * for images that you know that will be show only once.
-     * 
-     * @return
-     */
+
     public ImageLoader getImageLoader() {
         if (mImageLoader != null) {
             return mImageLoader;

@@ -19,7 +19,6 @@
         style="@style/BukoliExampleButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:drawableRight="@drawable/quantum_ic_play_arrow_grey600_36"
         android:text="Default Select Point" />
 
     <Button
@@ -28,7 +27,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="1dp"
-        android:drawableRight="@drawable/quantum_ic_play_arrow_grey600_36"
         android:text="Default Info" />
 
 
@@ -46,7 +44,6 @@
         style="@style/BukoliExampleButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:drawableRight="@drawable/quantum_ic_play_arrow_grey600_36"
         android:text="Select Point with phone number" />
 
     <Button
@@ -55,7 +52,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="1dp"
-        android:drawableRight="@drawable/quantum_ic_play_arrow_grey600_36"
         android:text="Info" />
 
     <!--Markafoni-->
@@ -72,7 +68,6 @@
         style="@style/BukoliExampleButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:drawableRight="@drawable/quantum_ic_play_arrow_grey600_36"
         android:text="Select Point" />
 
     <Button
@@ -81,7 +76,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="1dp"
-        android:drawableRight="@drawable/quantum_ic_play_arrow_grey600_36"
         android:text="Info" />
 
 

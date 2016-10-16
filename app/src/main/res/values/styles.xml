@@ -10,7 +10,7 @@
 
     <style name="BukoliExampleButton" parent="Base.Widget.AppCompat.Button">
 
-        <item name="android:drawableRight">@drawable/quantum_ic_play_arrow_grey600_36</item>
+        <item name="android:drawableRight">@drawable/next</item>
         <item name="android:background">@color/white_alpha</item>
         <item name="android:textColor">@color/accentGrey</item>
         <item name="android:gravity">center_vertical|left</item>

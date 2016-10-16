@@ -3,17 +3,6 @@ package com.mobillium.bukoliandroidsdk.utils.patternedtextwatcher;
 import android.text.Editable;
 import android.text.TextWatcher;
 
-/**
- * <p>This class is needed to format Código cuenta cliente (CCC).</p>
- * <p>The Customer Account Code (CCC) is a code used in Spain by financial institutions (banks
- * and credit unions)
- * to identify the accounts of their clients. It consists of twenty digits.</p>
- * <a href="URL">https://es.wikipedia.org/wiki/C%C3%B3digo_cuenta_cliente</a>
- * <p/>
- *
- * @author Savelii Zagurskii
- * @hide
- */
 @Deprecated
 public class CccFormatTextWatcher implements TextWatcher {
 

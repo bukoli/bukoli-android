@@ -1,5 +1,27 @@
 apply plugin: 'com.android.library'
+ext {
+    bintrayRepo = 'maven'
+    bintrayName = 'bukoli-sdk'
 
+    publishedGroupId = 'com.mobillium.bukoliandroidsdk'
+    libraryName = 'BukoliSDK'
+    artifact = 'bukoliandroidsdk'
+
+    libraryDescription = 'Bukoli SDK for Android OS'
+
+    siteUrl = 'https://github.com/bukoli/bukoli-android'
+    gitUrl = 'https://github.com/bukoli/bukoli-android.git'
+
+    libraryVersion = '1.0.0'
+
+    developerId = 'oguzhandongul'
+    developerName = 'Oguzhan Dongul'
+    developerEmail = 'oguzhandongul@gmail.com'
+
+    licenseName = 'The Apache Software License, Version 2.0'
+    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    allLicenses = ["Apache-2.0"]
+}
 android {
     compileSdkVersion 24
     buildToolsVersion "24.0.2"
@@ -31,3 +53,47 @@ dependencies {
     compile 'com.github.bumptech.glide:glide:3.7.0'
     compile 'com.mcxiaoke.volley:library:1.0.19'
 }
+
+apply plugin: 'com.github.dcendents.android-maven'
+
+group = publishedGroupId                               // Maven Group ID for the artifact
+
+install {
+    repositories.mavenInstaller {
+        // This generates POM.xml with proper parameters
+        pom {
+            project {
+                packaging 'aar'
+                groupId publishedGroupId
+                artifactId artifact
+
+                // Add your description here
+                name libraryName
+                description libraryDescription
+                url siteUrl
+
+                // Set your license
+                licenses {
+                    license {
+                        name licenseName
+                        url licenseUrl
+                    }
+                }
+                developers {
+                    developer {
+                        id developerId
+                        name developerName
+                        email developerEmail
+                    }
+                }
+                scm {
+                    connection gitUrl
+                    developerConnection gitUrl
+                    url siteUrl
+
+                }
+            }
+        }
+    }
+}
+apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/bintrayv1.gradle'

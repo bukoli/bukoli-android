@@ -32,7 +32,6 @@
     </style>
 
     <style name="BukoliButton" parent="Base.Widget.AppCompat.Button">
-
         <item name="android:background">@color/white_alpha</item>
         <item name="android:textColor">@color/accentGrey</item>
         <item name="android:gravity">center_vertical|left</item>
