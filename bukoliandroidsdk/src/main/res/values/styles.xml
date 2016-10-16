@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/bukoliYellow</item>
+        <item name="colorPrimaryDark">@color/bukoliYellowDark</item>
+        <item name="colorAccent">@color/accentGrey</item>
+        <item name="drawerArrowStyle">@style/MyDrawerArrowToggle</item>
+        <item name="android:textColorSecondaryInverse">@color/white</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+
+    <style name="ToolbarStyleOverflow" parent="AppTheme">
+        <item name="android:textColorPrimary">@color/white</item>
+        <item name="android:textColorSecondary">@color/white</item>
+        <item name="android:actionMenuTextColor">@color/white</item>
+        <item name="colorAccent">@color/white</item>
+    </style>
+
+    <style name="MyDrawerArrowToggle" parent="Widget.AppCompat.DrawerArrowToggle">
+        <item name="color">@color/DrawerToggleColor</item>
+    </style>
+
+    <style name="BukoliButton" parent="Base.Widget.AppCompat.Button">
+
+        <item name="android:background">@color/white_alpha</item>
+        <item name="android:textColor">@color/accentGrey</item>
+        <item name="android:gravity">center_vertical|left</item>
+        <item name="android:paddingLeft">20dp</item>
+
+    </style>
+</resources>

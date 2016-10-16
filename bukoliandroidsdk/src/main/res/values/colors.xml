@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="bukoliYellow">#F8BA1B</color>
+    <color name="bukoliYellowDark">#dea618</color>
+    <color name="accentGrey">#3e3e3e</color>
+    <color name="bukoliGrey">#555555</color>
+    <color name="bukoliGreyDark">#333333</color>
+    <color name="bukoliGreyLight">#cacaca</color>
+
+    <color name="DrawerToggleColor">@color/white</color>
+    <color name="white">#FFFFFF</color>
+
+    <color name="cvMainRowTitle">#4D5156</color>
+    <color name="cvMainRowGuidance">#C6C6CC</color>
+
+    <color name="TanitimBottomNavigation">#56555A</color>
+    <color name="indicatorPagercolorTransparent">#40FFFFFF</color>
+
+    <color name="colorGreyLight">#F9F9FA</color>
+    <color name="colorGreyTrans">#66000000</color>
+    <color name="colorGreyButton">#f5f5f5</color>
+    <color name="colorGrey">#E3E3E6</color>
+    <color name="colorGreyTab">#f0f0f7</color>
+    <color name="colorGreyTabSelected">#f7f7ff</color>
+    <color name="colorGreyTabTextColor">#abacb2</color>
+    <color name="colorGreyRipple">#e0e0e0</color>
+    <color name="colorGreyHint">#5c6066</color>
+    <color name="colorGreyDark">#4d5156</color>
+    <color name="colorYellowPointAdd">#3e3e3e</color>
+
+
+    <color name="colorGreen">#6ec98c</color>
+    <color name="colorGreenDark">#23a64b</color>
+    <color name="colorRed">#f28382</color>
+
+    <color name="white_alpha">#8FFF</color>
+    <color name="white_transparent">#28ffffff</color>
+    <color name="black_alpha">#2000</color>
+    <color name="black_transparent">#CC000000</color>
+</resources>

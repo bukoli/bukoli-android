@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:adjustViewBounds="true"
+        android:layout_marginLeft="80dp"
+        android:src="@drawable/icon_bg" />
+
+    <TextView
+        android:id="@+id/tvDialogTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="30dp"
+        android:gravity="center_vertical|left"
+        android:text="@string/dialog_title"
+        android:textColor="@color/bukoliYellow"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/tvDialogTitle"
+        android:layout_marginTop="0dp"
+        android:padding="15dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tvDialogDesc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical|left"
+                android:text="Bukoli, Markofoniden aldığınız ürünleri, ister mesai sonrası, isterseniz de yolunuzun üsründen kısacası size neresi uygunsa oradan teslim almanızı sağlayan yepyeni bir sistem. Anlaşmalı Bukoli noktalarından size en uygunu seçin ve kolinizi teslim alın."
+                android:textColor="@color/accentGrey"
+                android:textSize="13sp"
+                android:textStyle="normal" />
+
+            <!--Row 1-->
+            <ImageView
+                android:id="@+id/ivRow1"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:layout_below="@+id/tvDialogDesc"
+                android:layout_marginTop="10dp"
+                android:adjustViewBounds="true"
+                android:src="@drawable/icon_1" />
+
+            <TextView
+                android:id="@+id/tvRow1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/ivRow1"
+                android:layout_alignTop="@+id/ivRow1"
+                android:layout_toRightOf="@+id/ivRow1"
+                android:gravity="center_vertical|left"
+                android:layout_marginLeft="15dp"
+                android:text="@string/dialog_row_2"
+                android:textColor="@color/accentGrey"
+                android:textSize="14sp"
+                android:textStyle="normal" />
+
+
+            <!--Row 2-->
+            <ImageView
+                android:id="@+id/ivRow2"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:layout_below="@+id/ivRow1"
+                android:layout_marginTop="10dp"
+                android:adjustViewBounds="true"
+                android:src="@drawable/icon_2" />
+
+            <TextView
+                android:id="@+id/tvRow2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/ivRow2"
+                android:layout_alignTop="@+id/ivRow2"
+                android:layout_toRightOf="@+id/ivRow2"
+                android:gravity="center_vertical|left"
+                android:layout_marginLeft="15dp"
+                android:text="@string/dialog_row_2"
+                android:textColor="@color/accentGrey"
+                android:textSize="14sp"
+                android:textStyle="normal" />
+
+
+            <!--Row 3-->
+            <ImageView
+                android:id="@+id/ivRow3"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:layout_below="@+id/ivRow2"
+                android:layout_marginTop="10dp"
+                android:adjustViewBounds="true"
+                android:src="@drawable/icon_3" />
+
+            <TextView
+                android:id="@+id/tvRow3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/ivRow3"
+                android:layout_alignTop="@+id/ivRow3"
+                android:layout_toRightOf="@+id/ivRow3"
+                android:gravity="center_vertical|left"
+                android:layout_marginLeft="15dp"
+                android:text="@string/dialog_row_3"
+                android:textColor="@color/accentGrey"
+                android:textSize="14sp"
+                android:textStyle="normal" />
+
+            <!--Row 4-->
+            <ImageView
+                android:id="@+id/ivRow4"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:layout_below="@+id/ivRow3"
+                android:layout_marginTop="10dp"
+                android:adjustViewBounds="true"
+                android:src="@drawable/icon_4" />
+
+            <TextView
+                android:id="@+id/tvRow4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/ivRow4"
+                android:layout_alignTop="@+id/ivRow4"
+                android:layout_toRightOf="@+id/ivRow4"
+                android:gravity="center_vertical|left"
+                android:layout_marginLeft="15dp"
+                android:text="@string/dialog_row_4"
+                android:textColor="@color/accentGrey"
+                android:textSize="14sp"
+                android:textStyle="normal" />
+
+        </RelativeLayout>
+    </android.support.v4.widget.NestedScrollView>
+
+    <ImageView
+        android:id="@+id/ivCloseButton"
+        android:layout_width="46dp"
+        android:layout_height="46dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:adjustViewBounds="true"
+        android:padding="12dp"
+        android:src="@drawable/icon_close" />
+
+</RelativeLayout>

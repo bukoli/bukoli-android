@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/markerImage"
+        android:layout_width="42dp"
+        android:layout_height="60dp"
+        android:adjustViewBounds="true"
+        android:src="@drawable/icon_pin"
+        android:tint="@color/bukoliYellow" />
+
+    <TextView
+        android:id="@+id/tvNumber"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="3dp"
+        android:background="@drawable/timer_circle_stroke"
+        android:gravity="center"
+        android:text="20"
+        android:textColor="#FFF"
+        android:textSize="18dp"
+        android:textStyle="bold" />
+
+</RelativeLayout>

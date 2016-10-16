@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.design.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/appBarLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:fitsSystemWindows="true"
+            android:theme="@style/AppTheme.AppBarOverlay"
+            app:contentScrim="@android:color/transparent">
+
+            <android.support.design.widget.CollapsingToolbarLayout
+                android:id="@+id/collapsing_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:elevation="0dp"
+                app:contentScrim="@null"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+
+                <android.support.v7.widget.Toolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    android:background="?attr/colorPrimary"
+                    app:contentInsetLeft="0dp"
+                    app:contentInsetStart="0dp"
+                    app:layout_collapseMode="pin"
+                    app:theme="@style/ToolbarStyleOverflow">
+
+                    <LinearLayout
+                        android:id="@+id/rlSearchView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="15dp"
+                        android:background="@drawable/search_layer_pressed"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:visibility="visible">
+
+                        <ImageView
+                            android:id="@+id/search_icon_left"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:adjustViewBounds="true"
+                            android:padding="8dp"
+                            android:src="@drawable/icon_search"
+                            android:tint="@color/white" />
+
+                        <RelativeLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center">
+
+                            <LinearLayout
+                                android:layout_width="0px"
+                                android:layout_height="0px"
+                                android:focusable="true"
+                                android:focusableInTouchMode="true" />
+
+                            <EditText
+                                android:id="@+id/etSearchMain"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:background="@null"
+                                android:hint="Ara"
+                                android:imeOptions="actionSearch"
+                                android:inputType="text"
+                                android:singleLine="true"
+                                android:text=""
+                                android:textColor="@android:color/white"
+                                android:textColorHint="#dfff"
+                                android:textSize="18sp" />
+
+                        </RelativeLayout>
+
+
+                        <ImageView
+                            android:id="@+id/search_icon"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:adjustViewBounds="true"
+                            android:padding="12dp"
+                            android:scaleX="1"
+                            android:scaleY="1"
+                            android:src="@drawable/icon_close"
+                            android:tint="@color/white"
+                            android:visibility="gone" />
+
+                    </LinearLayout>
+
+
+                </android.support.v7.widget.Toolbar>
+            </android.support.design.widget.CollapsingToolbarLayout>
+
+
+        </android.support.design.widget.AppBarLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <fragment
+                android:id="@+id/map"
+                android:name="com.google.android.gms.maps.SupportMapFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:background="@color/white"
+                android:visibility="gone"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            </android.support.v7.widget.RecyclerView>
+
+
+        </RelativeLayout>
+
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:clickable="true"
+            android:src="@drawable/icon_list"
+            android:layout_gravity="bottom|right"/>
+
+    </android.support.design.widget.CoordinatorLayout>
+
+
+    <FrameLayout
+        android:id="@+id/frSearchContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize">
+
+
+    </FrameLayout>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="100dp"
+        android:indeterminate="false"
+        android:visibility="gone" />
+
+    <!--<LinearLayout-->
+    <!--android:id="@+id/llNotFound"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_alignParentBottom="true"-->
+    <!--android:gravity="center"-->
+    <!--android:layout_marginBottom="80dp"-->
+    <!--android:orientation="vertical"-->
+    <!--android:visibility="gone">-->
+
+    <!--<ImageView-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:src="@drawable/icon_default_bukolinokta" />-->
+
+    <!--<com.mobillium.bukoli.customviews.MobilliumTextView-->
+    <!--style="@style/Yazi.Kucuk"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_gravity="center_horizontal|bottom"-->
+    <!--android:layout_marginTop="10dp"-->
+    <!--android:padding="10dp"-->
+    <!--android:text="@string/noktalar_not_found"-->
+    <!--android:textColor="@color/colorGreyTabTextColor" />-->
+    <!--</LinearLayout>-->
+
+
+</RelativeLayout>
+

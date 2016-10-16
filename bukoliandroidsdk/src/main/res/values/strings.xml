@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">Bukoli Android SDK</string>
+    <string name="ok_button">Tamam</string>
+    <string name="progress_message">Lutfen bekleyiniz...</string>
+    <string name="dialog_title">Bukoli Nedir?</string>
+    <string name="dialog_description">Bukoli, %1$s aldığınız ürünleri, ister mesai sonrası, isterseniz de yolunuzun üsründen kısacası size neresi uygunsa oradan teslim almanızı sağlayan yepyeni bir sistem. Anlaşmalı Bukoli noktalarından size en uygunu seçin ve kolinizi teslim alın.</string>
+    <string name="dialog_row_1"> %1$s alışverişinizi tamamlayın ve teslimat seçeneklerinde Bukoliyi seçin</string>
+    <string name="dialog_row_2">Size en uygun Bukoli noktasını haritadan seçin</string>
+    <string name="dialog_row_3">Cep telefonunuza gelen sms bilgilerini saklayın</string>
+    <string name="dialog_row_4">Seçtiğiniz Bukoli teslimat noktasında teslimat kodunu paylaşın ve kolinizi güvenle teslim alın</string>
+
+    <string name="dialog_workhours">Hafta içi: 09:30 - 24:00 \nCumartesi: 10:30 - 24:00\nPazar: 10:30 - 23:00</string>
+
+<!--<string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">-->
+        <!--AIzaSyA4VOgjHdZupbe0YT5t7fUtWryoytRIjz8-->
+    <!--</string>-->
+</resources>

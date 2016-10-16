@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:mobilliumfont="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:gravity="center_horizontal"
+    android:paddingBottom="10dp">
+
+    <RelativeLayout
+        android:id="@+id/topPanel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:minHeight="40dp">
+
+        <TextView
+            android:id="@+id/tvDialogTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:gravity="center_vertical|left"
+            android:text="Nisantasi Market"
+            android:textColor="@color/accentGrey"
+            android:textSize="18sp"
+            android:visibility="visible" />
+
+        <ImageView
+            android:id="@+id/ivIconItem"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentRight="true"
+            android:padding="10dp"
+            android:src="@drawable/icon_close"
+            android:visibility="visible" />
+
+
+    </RelativeLayout>
+
+    <ScrollView
+        android:id="@+id/contentPanel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/topPanel">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
+
+
+            <ImageView
+                android:id="@+id/ivPoint"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter" />
+
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:padding="15dp">
+
+
+                <TextView
+                    android:id="@+id/tvDialogNoktalarimAddress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginTop="5dp"
+                    android:text="Çelebi Cad. No:32 / B / \nNurtepe"
+                    android:textColor="@color/accentGrey"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/tvDialogSaatler"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginTop="20dp"
+                    android:text="@string/dialog_workhours"
+                    android:textColor="@color/accentGrey"
+                    android:textSize="11sp" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+
+    <TextView
+        android:id="@+id/btSend"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_below="@+id/contentPanel"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="5dp"
+        android:background="@color/bukoliYellow"
+        android:gravity="center"
+        android:text="Bu Adrese Gönder"
+        android:textColor="@color/white" />
+
+
+</RelativeLayout>

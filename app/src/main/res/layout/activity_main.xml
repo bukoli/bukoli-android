@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/llContainer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bukoliGreyLight"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/activity_vertical_margin">
+
+    <TextView
+        style="@style/BukoliExampleTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Bukoli"
+        android:textColor="@color/accentGrey" />
+
+    <Button
+        android:id="@+id/btBukoliPoint"
+        style="@style/BukoliExampleButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableRight="@drawable/quantum_ic_play_arrow_grey600_36"
+        android:text="Default Select Point" />
+
+    <Button
+        android:id="@+id/btBukoliInfo"
+        style="@style/BukoliExampleButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        android:drawableRight="@drawable/quantum_ic_play_arrow_grey600_36"
+        android:text="Default Info" />
+
+
+    <!--Markafoni-->
+
+    <TextView
+        style="@style/BukoliExampleTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Markafoni"
+        android:textColor="@color/accentGrey" />
+
+    <Button
+        android:id="@+id/btMarkafoniPoint"
+        style="@style/BukoliExampleButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableRight="@drawable/quantum_ic_play_arrow_grey600_36"
+        android:text="Select Point with phone number" />
+
+    <Button
+        android:id="@+id/btMarkafoniInfo"
+        style="@style/BukoliExampleButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        android:drawableRight="@drawable/quantum_ic_play_arrow_grey600_36"
+        android:text="Info" />
+
+    <!--Markafoni-->
+
+    <TextView
+        style="@style/BukoliExampleTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Koçtaş"
+        android:textColor="@color/accentGrey" />
+
+    <Button
+        android:id="@+id/btKoctasPoint"
+        style="@style/BukoliExampleButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableRight="@drawable/quantum_ic_play_arrow_grey600_36"
+        android:text="Select Point" />
+
+    <Button
+        android:id="@+id/btKoctasInfo"
+        style="@style/BukoliExampleButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        android:drawableRight="@drawable/quantum_ic_play_arrow_grey600_36"
+        android:text="Info" />
+
+
+</LinearLayout>
