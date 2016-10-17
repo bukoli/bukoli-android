@@ -13,6 +13,7 @@ import com.mobillium.bukoliandroidsdk.callback.InfoCallback;
 import com.mobillium.bukoliandroidsdk.callback.SelectPointCallBack;
 import com.mobillium.bukoliandroidsdk.models.BukoliLocation;
 import com.mobillium.bukoliandroidsdk.models.DialogModel;
+import com.mobillium.bukoliandroidsdk.utils.BukoliSdkNotInitializedException;
 import com.mobillium.bukoliandroidsdk.utils.DialogHelper;
 import com.mobillium.bukoliandroidsdk.utils.MyVolley;
 
@@ -57,18 +58,28 @@ public class Bukoli {
 
 
     private Bukoli() {
-        // Exists only to defeat instantiation.
         myVolley = new MyVolley(applicationContext);
         gson = new Gson();
         mSharedPrefs = applicationContext.getSharedPreferences("bukoliSDK", MODE_PRIVATE);
         mPrefsEditor = mSharedPrefs.edit();
     }
 
+    /**
+     * This function creates an instance of Bukoli
+     * Must be called after "sdkInitialize" method otherwise will throw an exception
+     *
+     */
     public static Bukoli getInstance() {
-        if (instance == null) {
-            instance = new Bukoli();
+
+        try {
+            if (instance == null) {
+                instance = new Bukoli();
+            }
+            return instance;
+        } catch (BukoliSdkNotInitializedException ex) {
+
+            throw new BukoliSdkNotInitializedException("");
         }
-        return instance;
     }
 
     public String getPackageName() {
@@ -92,7 +103,12 @@ public class Bukoli {
         sdkInitialized = true;
     }
 
-
+    /**
+     * This function creates and shows info dialog
+     *
+     * @param activity The activity context
+     * @param callback The callback that will be called when the dialog is opened and closed
+     */
     public void showInfoDialog(Activity activity, final InfoCallback callback) {
         this.infoCallback = callback;
         DialogModel modelLocation = new DialogModel(getBrandName(), getBrandName2(), getButtonTextColor(), getButtonBackgroundColor());
@@ -100,12 +116,22 @@ public class Bukoli {
 
     }
 
+    /**
+     * This function opens the Point selection activity
+     *
+     * @param activity The activity context
+     * @param callback The callback that will be called when the point is selected, an error happened or selection cancelled
+     */
     public void showPointSelection(Activity activity, final SelectPointCallBack callback) {
         this.callBack = callback;
         activity.startActivity(new Intent(activity, ActivitySelectPoint.class));
 
     }
 
+    /**
+     * This function returns current API key
+     *
+     */
     public static String getApiKey() {
         return bukoliapiKey;
     }
@@ -136,48 +162,87 @@ public class Bukoli {
         return brandName;
     }
 
-    public void setBrandName(String brandName) {
+    /**
+     * This function sets the brand name and returns the Instance of Bukoli
+     *
+     * @param brandName the brand name
+     */
+    public Bukoli setBrandName(String brandName) {
         this.brandName = brandName;
+        return getInstance();
     }
 
     public String getBrandName2() {
         return brandName2;
     }
 
-    public void setBrandName2(String brandName2) {
+    /**
+     * This function sets ablative form of the brand name and returns the Instance of Bukoli
+     *
+     * @param brandName2 ablative form of the brand name
+     */
+    public Bukoli setBrandName2(String brandName2) {
         this.brandName2 = brandName2;
+        return getInstance();
     }
 
     public int getButtonTextColor() {
         return buttonTextColor;
     }
 
-    public void setButtonTextColor(int buttonTextColor) {
+    /**
+     * This function sets the secondary theme color of Button Texts and icons and returns the Instance of Bukoli
+     *
+     * @param buttonTextColor the secondary color integer value
+     */
+    public Bukoli setButtonTextColor(int buttonTextColor) {
         this.buttonTextColor = buttonTextColor;
+        return getInstance();
     }
 
     public int getButtonBackgroundColor() {
         return buttonBackgroundColor;
     }
 
-    public void setButtonBackgroundColor(int buttonBackgroundColor) {
+    /**
+     * This function sets the primary theme color of UI(such as Buttons and Toolbar background) and returns the Instance of Bukoli
+     *
+     * @param buttonBackgroundColor the primary color integer value
+     */
+    public Bukoli setButtonBackgroundColor(int buttonBackgroundColor) {
         this.buttonBackgroundColor = buttonBackgroundColor;
+        return getInstance();
     }
 
     public int getDarkThemeColor() {
         return darkThemeColor;
     }
 
-    public void setDarkThemeColor(int darkThemeColor) {
+
+    /**
+     * This function sets the dark theme color of Pressed State of Button background and returns the Instance of Bukoli
+     *
+     * @param darkThemeColor the dark color integer value
+     */
+    public Bukoli setDarkThemeColor(int darkThemeColor) {
         this.darkThemeColor = darkThemeColor;
+        return getInstance();
     }
 
     public boolean isShowPhoneDialog() {
         return showPhoneDialog;
     }
 
-    public void setShowPhoneDialog(boolean showPhoneDialog) {
+    /**
+     * This function sets the Phone dialog value and returns the Instance of Bukoli
+     * If it is true, Phone number dialog will be shown after selection of the Point
+     * If it is false Phone number dialog will not be shown after selection of the Point
+     *
+     * @param showPhoneDialog the dark color integer value
+     */
+    public Bukoli setShowPhoneDialog(boolean showPhoneDialog) {
         this.showPhoneDialog = showPhoneDialog;
+        return getInstance();
     }
 
     public static int convertDpiToPixel(int dpi) {

@@ -199,9 +199,6 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
                     .setFastestInterval(1 * 1000); // 1 second, in milliseconds
 
             getCurrentLocation();
-        } else {
-//            DialogModel dialogModel = new DialogModel(getString(R.string.dialogConnectionTitle), getString(R.string.dialogConnectionDesc), getString(R.string.dialogConnectionPoz), getString(R.string.dialogConnectionNeg), R.drawable.icon_guvenliteslim);
-//            DialogHelper.showNoConnectionDialog(ActivityNoktaEkle.this, dialogModel, callbackDialog);
         }
 
 

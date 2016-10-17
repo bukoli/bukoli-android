@@ -25,6 +25,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //Initialize Bukoli SDK with Application context and API Key
         Bukoli.sdkInitialize(getApplicationContext(), "e6fa17c9-6168-4124-87c7-4b2310d1b4f9");
 
 
@@ -34,7 +36,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btMarkafoniInfo = (Button) findViewById(R.id.btMarkafoniInfo);
         btKoctasPoint = (Button) findViewById(R.id.btKoctasPoint);
         btKoctasInfo = (Button) findViewById(R.id.btKoctasInfo);
-
         llContainer = (LinearLayout) findViewById(R.id.llContainer);
 
         setClickListeners();
@@ -51,21 +52,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
+    //Show Info Dialog From Activity
     private void openInfoDialog() {
+
         Bukoli.getInstance().showInfoDialog(this, new InfoCallback() {
             @Override
             public void onDismiss() {
-                Log.d("BUKOLI", "dialog dismissed");
+                Log.d("BUKOLI", "Dialog dismissed");
             }
 
             @Override
             public void onDisplay() {
-                Log.d("BUKOLI", "dialog displayed");
+                Log.d("BUKOLI", "Dialog displayed");
 
             }
         });
     }
 
+    //Start Point Selection From Activity
     private void startSelection() {
 
         Bukoli.getInstance().showPointSelection(this, new SelectPointCallBack() {
@@ -123,26 +127,33 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void setBukoliStyle() {
-        Bukoli.getInstance().setBrandName("Marka");
-        Bukoli.getInstance().setBrandName2("Marka'dan");
-        Bukoli.getInstance().setButtonTextColor(0xFFFFFFFF);
-        Bukoli.getInstance().setButtonBackgroundColor(0xFFF8BA1B);
-        Bukoli.getInstance().setShowPhoneDialog(false);
+        Bukoli.getInstance()
+                .setBrandName("Marka")
+                .setBrandName2("Marka'dan")
+                .setButtonTextColor(0xFFFFFFFF)
+                .setButtonBackgroundColor(0xFFF8BA1B)
+                .setShowPhoneDialog(false);
     }
 
     private void setMarkafoniStyle() {
-        Bukoli.getInstance().setBrandName("Markafoni");
-        Bukoli.getInstance().setBrandName2("Markafoni'den");
-        Bukoli.getInstance().setButtonTextColor(0xFFFFFFFF);
-        Bukoli.getInstance().setButtonBackgroundColor(0xFFAF005F);
-        Bukoli.getInstance().setShowPhoneDialog(true);
+        Bukoli.getInstance()
+                .setBrandName("Markafoni")
+                .setBrandName2("Markafoni'den")
+                .setButtonTextColor(0xFFFFFFFF)
+                .setButtonBackgroundColor(0xFFAF005F)
+                .setShowPhoneDialog(true);
+
     }
 
     private void setKoctasStyle() {
-        Bukoli.getInstance().setBrandName("Koçtaş");
-        Bukoli.getInstance().setBrandName2("Koçtaş'tan");
-        Bukoli.getInstance().setButtonTextColor(0xFFFFFFFF);
-        Bukoli.getInstance().setButtonBackgroundColor(0xFFF68B1E);
-        Bukoli.getInstance().setShowPhoneDialog(false);
+
+        Bukoli.getInstance()
+                .setBrandName("Koçtaş")
+                .setBrandName2("Koçtaş'tan")
+                .setButtonTextColor(0xFFFFFFFF)
+                .setButtonBackgroundColor(0xFFF68B1E)
+                .setShowPhoneDialog(false);
+
+
     }
 }
