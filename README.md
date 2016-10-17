@@ -105,6 +105,10 @@ Bukoli.getInstance()
 First parameter is Activity context.
 Second parameter is presenter callback for Point selection.
 
+The selected point object and the phone number which is entered by user returns with onSuccess() method.
+If the user cancels the process without selecting any point, onCancel() method will be called.
+If Bukoli.getInstance().setShowPhoneDialog(true); used and process cancelled after selecting any point without entering the phone number, onError() method will be called and selected point will be returned.
+
 ```java
 import com.mobillium.bukoliandroidsdk.Bukoli;
 import com.mobillium.bukoliandroidsdk.callback.SelectPointCallBack;
