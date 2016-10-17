@@ -95,8 +95,8 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
     private GoogleApiClient mGoogleApiClient;
     double currentLatitude = 29.0092983;
     double currentLongitude = 41.043609;
-    double targetLatitude = 28.991772;
-    double targetLongitude = 41.052911;
+    double targetLatitude = 29.0092983;
+    double targetLongitude = 41.043609;
     double centertLatitude = 38.985808;
     double centerLongitude = 35.425071;
     private LocationRequest mLocationRequest;
@@ -124,13 +124,13 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
     private static final long SEARCH_DELAY_MS = 1000L;
     private ProgressBar progressBar;
     private LinearLayout rlSearchView;
-    private ImageView search_icon,search_icon_left;
+    private ImageView search_icon, search_icon_left;
     private boolean canPinLocation = true;
     private boolean canFocusMap = true;
 
     CameraPosition lastPosition;
     Marker lastOpenned = null;
-    FloatingActionButton fab;
+    FloatingActionButton fab, fab2;
 
     boolean canmakeSearch = true;
 
@@ -148,7 +148,10 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
 
     View marker, centerMarker;
     TextView markerText;
-    ImageView markerImage, centerImage;
+    ImageView markerImage, centerImage, ivCenter;
+    RelativeLayout rlCenterContainer;
+    Handler mapHandler;
+    boolean canMakeReq = false;
 
     @Override
     protected void onResume() {
@@ -186,6 +189,7 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
 
 
         if (isOnline()) {
+            canMakeReq = true;
             mGoogleApiClient = new GoogleApiClient.Builder(this)
                     .addConnectionCallbacks(this)
                     .addOnConnectionFailedListener(this)
@@ -199,17 +203,43 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
                     .setFastestInterval(1 * 1000); // 1 second, in milliseconds
 
             getCurrentLocation();
+
+            mapHandler = new Handler();
+
         }
 
 
     }
 
+    Runnable mapRunnable = new Runnable() {
+        @Override
+        public void run() {
+
+            if (Math.abs(lastPosition.target.latitude - mMap.getCameraPosition().target.latitude) > 0.0001 && Math.abs(lastPosition.target.longitude - mMap.getCameraPosition().target.longitude) > 0.0001) {
+                if (canMakeReq) {
+                    LatLng center = mMap.getCameraPosition().target;
+                    targetLongitude = center.longitude;
+                    targetLatitude = center.latitude;
+                    mMap.clear();
+                    adapterNoktalarimItems.clearItems();
+                    canFocusMap = false;
+                    canMakeReq = false;
+                    makePointsRequest();
+                    lastPosition = mMap.getCameraPosition();
+                }
+            }
+        }
+    };
+
     @Override
     protected void createViews() {
         super.createViews();
         fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab2 = (FloatingActionButton) findViewById(R.id.fab2);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         rlSearchView = (LinearLayout) findViewById(R.id.rlSearchView);
+        ivCenter = (ImageView) findViewById(R.id.ivCenter);
+        rlCenterContainer = (RelativeLayout) findViewById(R.id.rlCenterContainer);
         search_icon = (ImageView) findViewById(R.id.search_icon);
         search_icon_left = (ImageView) findViewById(R.id.search_icon_left);
         etSearchMain = (EditText) findViewById(R.id.etSearchMain);
@@ -234,10 +264,15 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
         setCursorDrawableColor(etSearchMain, Bukoli.getInstance().getButtonTextColor());
         setFabIcon(TYPE_MAP);
 
-        Drawable searchLayer = ContextCompat.getDrawable(this,R.drawable.search_layer_pressed);
+        Drawable searchLayer = ContextCompat.getDrawable(this, R.drawable.search_layer_pressed);
         searchLayer.mutate().setColorFilter(Bukoli.getInstance().getButtonTextColor(), PorterDuff.Mode.SRC_ATOP);
         rlSearchView.setBackground(searchLayer);
 
+        Drawable myFabSrc = ContextCompat.getDrawable(this, R.drawable.icon_target);
+        Drawable willBeWhite = myFabSrc.getConstantState().newDrawable();
+        willBeWhite.mutate().setColorFilter(Bukoli.getInstance().getDarkThemeColor(), PorterDuff.Mode.SRC_ATOP);
+        fab2.setImageDrawable(willBeWhite);
+        fab2.setBackgroundTintList(ColorStateList.valueOf(Bukoli.getInstance().getButtonTextColor()));
 
     }
 
@@ -257,7 +292,7 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
         markerText.setText("27");
         markerImage.setColorFilter(Bukoli.getInstance().getButtonBackgroundColor(), PorterDuff.Mode.SRC_ATOP);
 
-        Drawable markerLayer = ContextCompat.getDrawable(this,R.drawable.timer_circle_stroke);
+        Drawable markerLayer = ContextCompat.getDrawable(this, R.drawable.timer_circle_stroke);
         markerLayer.mutate().setColorFilter(Bukoli.getInstance().getButtonTextColor(), PorterDuff.Mode.SRC_ATOP);
         markerText.setBackground(markerLayer);
 
@@ -306,11 +341,20 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
             public void onClick(View v) {
                 if (recyclerView.getVisibility() == View.VISIBLE) {
                     recyclerView.setVisibility(View.GONE);
+                    rlCenterContainer.setVisibility(View.VISIBLE);
                     setFabIcon(TYPE_MAP);
                 } else {
                     recyclerView.setVisibility(View.VISIBLE);
+                    rlCenterContainer.setVisibility(View.GONE);
                     setFabIcon(TYPE_LIST);
                 }
+            }
+        });
+        fab2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                canPinLocation = true;
+                getCurrentLocation();
             }
         });
 
@@ -355,6 +399,7 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
                         startActivityForResult(callGPSSettingIntent, 1);
                         break;
                     case NEGATIVE_BUTTON:
+                        canPinLocation = false;
                         handleNewLocation(null, true);
                         break;
                 }
@@ -423,6 +468,7 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
             @Override
             public void done(String result, ServiceException e) {
 
+                canMakeReq = true;
                 if (progressDialog != null && progressDialog.isShowing()) {
                     progressDialog.dismiss();
                 }
@@ -460,18 +506,10 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
                         if (canFocusMap) {
                             int padding = Bukoli.getInstance().convertDpiToPixel(50); // offset from edges of the map in pixels
                             mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, padding));
-                            addmarkerToCenterPoint(1500);
-                        } else {
-                            addmarkerToCenterPoint(0);
                         }
-                        Handler handler = new Handler();
-                        handler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                lastPosition = mMap.getCameraPosition();
-                                mMap.setOnCameraChangeListener(cameraChangeListener);
-                            }
-                        }, 1000);
+                        lastPosition = mMap.getCameraPosition();
+                        mMap.setOnCameraIdleListener(cameraIdleListener);
+                        mMap.setOnCameraMoveStartedListener(cameraMoveStartedListener);
 
 
                         setSearchString(responsePoints.getAddress());
@@ -531,7 +569,7 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
 
         // Add a marker in Istanbul and move the camera
 
-        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(centertLatitude, centerLongitude), 4);
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(currentLatitude, currentLongitude), 14);
         mMap.animateCamera(cameraUpdate);
 
 
@@ -554,16 +592,6 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
                 // Open the info window for the marker
                 marker.showInfoWindow();
                 findPoint(marker);
-                Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (!fab.isShown()) {
-                            fab.show();
-                        }
-                    }
-                }, 500);
-
                 // Re-assign the last openned such that we can close it later
                 lastOpenned = marker;
                 // Event was handled by our code do not launch default behaviour.
@@ -594,7 +622,7 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
 
     @Override
     public void onConnected(Bundle bundle) {
-        Log.i("BUKOLI", "BukoliLocation services connected.");
+        Log.i("BUKOLI", "Bukoli Location services connected.");
         if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
                 || ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
@@ -648,8 +676,10 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
 
         if (canPinLocation) {
             LatLng currentLoc = new LatLng(currentLatitude, currentLongitude);
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(currentLoc));
-            mMap.moveCamera(CameraUpdateFactory.zoomTo(16));
+//            mMap.moveCamera(CameraUpdateFactory.newLatLng(currentLoc));
+//            mMap.moveCamera(CameraUpdateFactory.zoomTo(16));
+            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(currentLatitude, currentLongitude), 14);
+            mMap.animateCamera(cameraUpdate);
             lastPosition = mMap.getCameraPosition();
             canPinLocation = false;
 
@@ -748,7 +778,20 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
                 DialogModel modelLocation = new DialogModel("Konum Özelliği Kapalı!", "Cihazınızın GPS özelliğini aktif hale getirmek için ayarlar butonuna dokununuz.", "AYARLAR", "VAZGEÇ", R.drawable.icon_map);
                 DialogHelper.showCommonDialog(ActivitySelectPoint.this, modelLocation, callbackDialogLoc);
             } else {
-                mGoogleApiClient.connect();
+                if (mGoogleApiClient.isConnected()) {
+                    if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                            || ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                        Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+                        if (location == null) {
+                            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+                        } else {
+                            handleNewLocation(location, false);
+                        }
+                    }
+                } else {
+                    mGoogleApiClient.connect();
+
+                }
                 return true;
             }
         } catch (RuntimeException e) {
@@ -982,7 +1025,6 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
         }
 
 
-        addmarkerToCenterPoint(0);
         canPinLocation = false;
 
         adapterNoktalarimItems.notifyDataSetChanged();
@@ -990,36 +1032,28 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
     }
 
 
-    GoogleMap.OnCameraChangeListener cameraChangeListener = new GoogleMap.OnCameraChangeListener() {
-        @Override
-        public void onCameraChange(CameraPosition cameraPosition) {
-
-            if (Math.abs(lastPosition.target.latitude - cameraPosition.target.latitude) > 0.0001 && Math.abs(lastPosition.target.longitude - cameraPosition.target.longitude) > 0.0001) {
-                LatLng center = mMap.getCameraPosition().target;
-                targetLongitude = center.longitude;
-                targetLatitude = center.latitude;
-                mMap.clear();
-                adapterNoktalarimItems.clearItems();
-                canFocusMap = false;
-                makePointsRequest();
-                lastPosition = cameraPosition;
-            }
-
-
-        }
-    };
+//    GoogleMap.OnCameraChangeListener cameraChangeListener = new GoogleMap.OnCameraChangeListener() {
+//        @Override
+//        public void onCameraChange(CameraPosition cameraPosition) {
+//
+//
+//
+//
+//        }
+//    };
 
     GoogleMap.OnCameraIdleListener cameraIdleListener = new GoogleMap.OnCameraIdleListener() {
         @Override
         public void onCameraIdle() {
-
+            mapHandler.removeCallbacks(mapRunnable);
+            mapHandler.postDelayed(mapRunnable, 750);
         }
     };
 
     GoogleMap.OnCameraMoveStartedListener cameraMoveStartedListener = new GoogleMap.OnCameraMoveStartedListener() {
         @Override
         public void onCameraMoveStarted(int i) {
-
+            mapHandler.removeCallbacks(mapRunnable);
         }
     };
 
@@ -1080,17 +1114,17 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
     };
 
 
-    private void addmarkerToCenterPoint(long delay) {
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                LatLng currentLoc = new LatLng(mMap.getCameraPosition().target.latitude, mMap.getCameraPosition().target.longitude);
-                mMap.addMarker(new MarkerOptions().position(currentLoc).zIndex(100).title("Merkez konum").icon(BitmapDescriptorFactory.fromBitmap(createDrawableFromView())));
-
-            }
-        }, delay);
-    }
+//    private void addmarkerToCenterPoint(long delay) {
+//        Handler handler = new Handler();
+//        handler.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                LatLng currentLoc = new LatLng(mMap.getCameraPosition().target.latitude, mMap.getCameraPosition().target.longitude);
+//                mMap.addMarker(new MarkerOptions().position(currentLoc).zIndex(100).title("Merkez konum").icon(BitmapDescriptorFactory.fromBitmap(createDrawableFromView())));
+//
+//            }
+//        }, delay);
+//    }
 
     public static void setCursorDrawableColor(EditText editText, int color) {
         try {

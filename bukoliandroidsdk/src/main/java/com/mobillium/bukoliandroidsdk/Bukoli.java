@@ -50,7 +50,7 @@ public class Bukoli {
     String brandName2 = "";
     int buttonTextColor = 0xFFFFFFFF; //Default White
     int buttonBackgroundColor = 0xFFF8BA1B; //Default Bukoli Yellow
-    int darkThemeColor = 0xFF3E3E3E; //Default Bukoli Yellow
+    int darkThemeColor = 0xFF3E3E3E; //Default Bukoli Grey
     boolean showPhoneDialog = false;
 
     SelectPointCallBack callBack;

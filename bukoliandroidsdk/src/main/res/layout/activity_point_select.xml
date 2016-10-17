@@ -75,7 +75,7 @@
                                 android:hint="Ara"
                                 android:imeOptions="actionSearch"
                                 android:inputType="text"
-                                android:singleLine="true"
+                                android:maxLines="1"
                                 android:text=""
                                 android:textColor="@android:color/white"
                                 android:textColorHint="#dfff"
@@ -114,31 +114,84 @@
                 android:id="@+id/map"
                 android:name="com.google.android.gms.maps.SupportMapFragment"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:layout_above="@+id/rlAdContainer" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:clipToPadding="false"
+                android:layout_above="@+id/rlAdContainer"
                 android:background="@color/white"
+                android:clipToPadding="false"
                 android:visibility="gone"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             </android.support.v7.widget.RecyclerView>
 
 
+            <RelativeLayout
+                android:id="@+id/rlCenterContainer"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_above="@+id/rlAdContainer"
+                android:background="@null">
+
+                <ImageView
+                    android:id="@+id/ivCenter"
+                    android:layout_width="65dp"
+                    android:layout_height="65dp"
+                    android:layout_centerInParent="true"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/icon_center" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rlAdContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:background="@color/accentGrey">
+
+                <TextView
+                    android:id="@+id/tvTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical|left"
+                    android:padding="10dp"
+                    android:text="Ad Text"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    android:visibility="visible" />
+
+            </RelativeLayout>
+
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/fab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/rlAdContainer"
+                android:layout_alignParentRight="true"
+                android:layout_marginBottom="16dp"
+                android:layout_marginRight="16dp"
+                android:clickable="true"
+                android:src="@drawable/icon_list" />
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/fab2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/fab"
+                android:layout_marginBottom="16dp"
+                android:layout_marginRight="16dp"
+                android:src="@drawable/icon_target"
+                app:layout_anchor="@id/fab"
+                android:layout_alignParentRight="true"
+                app:layout_anchorGravity="top" />
+
         </RelativeLayout>
 
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:clickable="true"
-            android:src="@drawable/icon_list"
-            android:layout_gravity="bottom|right"/>
 
     </android.support.design.widget.CoordinatorLayout>
 
@@ -160,32 +213,6 @@
         android:layout_marginTop="100dp"
         android:indeterminate="false"
         android:visibility="gone" />
-
-    <!--<LinearLayout-->
-    <!--android:id="@+id/llNotFound"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_alignParentBottom="true"-->
-    <!--android:gravity="center"-->
-    <!--android:layout_marginBottom="80dp"-->
-    <!--android:orientation="vertical"-->
-    <!--android:visibility="gone">-->
-
-    <!--<ImageView-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:src="@drawable/icon_default_bukolinokta" />-->
-
-    <!--<com.mobillium.bukoli.customviews.MobilliumTextView-->
-    <!--style="@style/Yazi.Kucuk"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_gravity="center_horizontal|bottom"-->
-    <!--android:layout_marginTop="10dp"-->
-    <!--android:padding="10dp"-->
-    <!--android:text="@string/noktalar_not_found"-->
-    <!--android:textColor="@color/colorGreyTabTextColor" />-->
-    <!--</LinearLayout>-->
 
 
 </RelativeLayout>
