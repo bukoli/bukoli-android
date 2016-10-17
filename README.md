@@ -2,7 +2,7 @@
 
 [![GitHub license](https://img.shields.io/github/license/dcendents/android-maven-gradle-plugin.svg)](http://www.apache.org/licenses/LICENSE-2.0.html)
 ![](https://img.shields.io/badge/platform-android-green.svg)
-[![API](https://img.shields.io/badge/API-16%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=16)
+![API](https://img.shields.io/badge/API-16%2B-brightgreen.svg?style=flat)
 ![](https://img.shields.io/badge/Gradle-v2.2.1-red.svg)
 [![Maven Central](https://img.shields.io/maven-central/v/com.github.dcendents/android-maven-gradle-plugin.svg)](http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22android-maven-gradle-plugin%22)
 
