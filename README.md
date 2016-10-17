@@ -4,7 +4,7 @@
 ![](https://img.shields.io/badge/platform-android-green.svg)
 [![API](https://img.shields.io/badge/API-16%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=16)
 ![](https://img.shields.io/badge/Gradle-v2.2.1-red.svg)
-[ ![Maven-Central](https://api.bintray.com/packages/oguzhandongul/maven/bukoli-sdk/images/download.svg) ](https://bintray.com/oguzhandongul/maven/bukoli-sdk/_latestVersion)
+[![Maven Central](https://img.shields.io/maven-central/v/com.github.dcendents/android-maven-gradle-plugin.svg)](http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22android-maven-gradle-plugin%22)
 
 
 You can sign up for a Bukoli account at http://www.bukoli.com.
@@ -28,7 +28,7 @@ To run the example project, clone or download the repo, and open the project on 
 ## Setup
 You can use Gradle or Maven to add the library as aar dependency to your build.
 ### Maven
-![maven-central](https://img.shields.io/maven-central/v/me.drakeet.materialdialog/library.svg) 
+[![Maven Central](https://img.shields.io/maven-central/v/com.github.dcendents/android-maven-gradle-plugin.svg)](http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22android-maven-gradle-plugin%22)
 ```groovy
 <dependency>
   <groupId>com.mobillium.bukoliandroidsdk</groupId>
@@ -42,10 +42,9 @@ You can use Gradle or Maven to add the library as aar dependency to your build.
 ![](https://img.shields.io/badge/Gradle-v2.2.1-red.svg)
 ```groovy
 dependencies {
-    compile 'com.mobillium.bukoliandroidsdk:bukoliandroidsdk:1.0.0'
+    compile 'com.mobillium.bukoliandroidsdk:bukoliandroidsdk:1.+'
 }
 ```
-
 
 ## Usage
 
@@ -55,6 +54,29 @@ dependencies {
 You need api key to integrate sdk to your application. You can get it from [Bukoli](http://www.bukoli.com)
 
 
+### Google Maps Api Key
+
+You need an API key for Google Maps. Define your API key as meta-data into your project's manifest.xml file. This key will be used in SDK.
+
+ [Google Maps Developer Documentation](https://developers.google.com/maps/documentation/android-api/)
+```xml
+ <application
+        ...
+
+        <!--
+            The API key for Google Maps-based APIs is defined as a string resource.
+            (See the file "res/values/google_maps_api.xml").
+            Note that the API key is linked to the encryption key used to sign the APK.
+            You need a different API key for each encryption key, including the release key that is used to
+            sign the APK for publishing.
+            You can define the keys for the debug and release targets in src/debug/ and src/release/.
+        -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
+
+    </application>
+```
 
 ### Initialize
 
