@@ -10,6 +10,7 @@
     <string name="dialog_row_4">Seçtiğiniz Bukoli teslimat noktasında teslimat kodunu paylaşın ve kolinizi güvenle teslim alın</string>
 
     <string name="dialog_workhours">Hafta içi: 09:30 - 24:00 \nCumartesi: 10:30 - 24:00\nPazar: 10:30 - 23:00</string>
+    <string name="sdk_init_error">You must initialize the Bukoli SDK first</string>
 
 <!--<string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">-->
         <!--AIzaSyA4VOgjHdZupbe0YT5t7fUtWryoytRIjz8-->

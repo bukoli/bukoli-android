@@ -230,6 +230,7 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
         search_icon.setColorFilter(Bukoli.getInstance().getButtonTextColor());
         search_icon_left.setColorFilter(Bukoli.getInstance().getButtonTextColor());
         etSearchMain.setTextColor(Bukoli.getInstance().getButtonTextColor());
+        etSearchMain.setHintTextColor(Bukoli.getInstance().getButtonTextColor());
         setCursorDrawableColor(etSearchMain, Bukoli.getInstance().getButtonTextColor());
         setFabIcon(TYPE_MAP);
 

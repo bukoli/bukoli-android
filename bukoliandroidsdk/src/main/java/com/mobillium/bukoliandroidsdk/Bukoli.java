@@ -67,23 +67,22 @@ public class Bukoli {
     /**
      * This function creates an instance of Bukoli
      * Must be called after "sdkInitialize" method otherwise will throw an exception
-     *
      */
     public static Bukoli getInstance() {
-
         try {
             if (instance == null) {
                 instance = new Bukoli();
             }
             return instance;
         } catch (BukoliSdkNotInitializedException ex) {
-
-            throw new BukoliSdkNotInitializedException("");
+            throw new BukoliSdkNotInitializedException("You must initialize the Bukoli SDK first");
         }
     }
 
     public String getPackageName() {
-
+        if (applicationContext == null) {
+            throw new BukoliSdkNotInitializedException("You must initialize the Bukoli SDK first");
+        }
         return applicationContext.getPackageName();
     }
 
@@ -110,6 +109,9 @@ public class Bukoli {
      * @param callback The callback that will be called when the dialog is opened and closed
      */
     public void showInfoDialog(Activity activity, final InfoCallback callback) {
+        if (!sdkInitialized) {
+            throw new BukoliSdkNotInitializedException("You must initialize the Bukoli SDK first");
+        }
         this.infoCallback = callback;
         DialogModel modelLocation = new DialogModel(getBrandName(), getBrandName2(), getButtonTextColor(), getButtonBackgroundColor());
         DialogHelper.showInfoDialog(activity, modelLocation, callback);
@@ -123,6 +125,9 @@ public class Bukoli {
      * @param callback The callback that will be called when the point is selected, an error happened or selection cancelled
      */
     public void showPointSelection(Activity activity, final SelectPointCallBack callback) {
+        if (!sdkInitialized) {
+            throw new BukoliSdkNotInitializedException("You must initialize the Bukoli SDK first");
+        }
         this.callBack = callback;
         activity.startActivity(new Intent(activity, ActivitySelectPoint.class));
 
@@ -130,7 +135,6 @@ public class Bukoli {
 
     /**
      * This function returns current API key
-     *
      */
     public static String getApiKey() {
         return bukoliapiKey;
@@ -150,11 +154,11 @@ public class Bukoli {
         return myVolley;
     }
 
-    public SelectPointCallBack getCallBack() {
+    SelectPointCallBack getCallBack() {
         return callBack;
     }
 
-    public InfoCallback getInfoCallback() {
+    InfoCallback getInfoCallback() {
         return infoCallback;
     }
 
@@ -172,6 +176,15 @@ public class Bukoli {
         return getInstance();
     }
 
+    /**
+     * This function sets the brand name and returns the Instance of Bukoli
+     *
+     * @param brandNameResID the brand name resource ID
+     */
+    public Bukoli setBrandName(int brandNameResID) {
+        return setBrandName(applicationContext.getString(brandNameResID));
+    }
+
     public String getBrandName2() {
         return brandName2;
     }
@@ -184,6 +197,15 @@ public class Bukoli {
     public Bukoli setBrandName2(String brandName2) {
         this.brandName2 = brandName2;
         return getInstance();
+    }
+
+    /**
+     * This function sets ablative form of the brand name and returns the Instance of Bukoli
+     *
+     * @param brandName2ResID ablative form of the brand name resource ID
+     */
+    public Bukoli setBrandName2(int brandName2ResID) {
+        return setBrandName2(applicationContext.getString(brandName2ResID));
     }
 
     public int getButtonTextColor() {
