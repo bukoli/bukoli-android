@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.TypedValue;
 
@@ -107,9 +109,9 @@ public class Bukoli {
      * This function creates and shows info dialog
      *
      * @param activity The activity context
-     * @param callback The callback that will be called when the dialog is opened and closed
+     * @param callback The callback that will be called when the dialog is opened and closed. Can be null.
      */
-    public void showInfoDialog(Activity activity, final InfoCallback callback) {
+    public void showInfoDialog(Activity activity, @Nullable final InfoCallback callback) {
         if (!sdkInitialized) {
             throw new BukoliSdkNotInitializedException("You must initialize the Bukoli SDK first");
         }
@@ -123,9 +125,9 @@ public class Bukoli {
      * This function opens the Point selection activity
      *
      * @param activity The activity context
-     * @param callback The callback that will be called when the point is selected, an error happened or selection cancelled
+     * @param callback The callback that will be called when the point is selected, an error happened or selection cancelled. Cannot be null.
      */
-    public void showPointSelection(Activity activity, final SelectPointCallBack callback) {
+    public void showPointSelection(Activity activity, @NonNull final SelectPointCallBack callback) {
         if (!sdkInitialized) {
             throw new BukoliSdkNotInitializedException("You must initialize the Bukoli SDK first");
         }

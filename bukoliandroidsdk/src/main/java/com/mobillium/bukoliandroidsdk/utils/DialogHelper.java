@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.StateListDrawable;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.StateSet;
 import android.view.View;
@@ -85,7 +87,7 @@ public class DialogHelper {
         }
     }
 
-    public static void showInfoDialog(final Context context, DialogModel model, final InfoCallback callback) {
+    public static void showInfoDialog(final Context context, DialogModel model, @Nullable final InfoCallback callback) {
 
         dismissCurrentDialog();
         //Initialise Dialog
@@ -111,6 +113,7 @@ public class DialogHelper {
         tvDialogDesc.setText(String.format(context.getString(R.string.dialog_description), model.getBrandName2()));
         tvRow1.setText(String.format(context.getString(R.string.dialog_row_1), model.getBrandName()));
 
+//        ivCloseButton.setColorFilter(Bukoli.getInstance().getDarkThemeColor(), PorterDuff.Mode.SRC_ATOP);
 
         //Set ClickListeners
         ivCloseButton.setOnClickListener(new View.OnClickListener() {
@@ -119,27 +122,28 @@ public class DialogHelper {
                 dialog.dismiss();
             }
         });
-        ivCloseButton.setColorFilter(Bukoli.getInstance().getDarkThemeColor(), PorterDuff.Mode.SRC_ATOP);
 
-        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialog) {
-                callback.onDismiss();
-            }
-        });
-        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
-            @Override
-            public void onShow(DialogInterface dialogInterface) {
-                callback.onDisplay();
-            }
-        });
+        if (callback != null) {
+            dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                @Override
+                public void onDismiss(DialogInterface dialog) {
+                    callback.onDismiss();
+                }
+            });
+            dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                @Override
+                public void onShow(DialogInterface dialogInterface) {
+                    callback.onDisplay();
+                }
+            });
+        }
         //Show Dialog
         dialog.show();
 
     }
 
 
-    public static void showNoktalarimDialog(final Context context, DialogPointModel model, final DialogCallback callback, String index, boolean selected) {
+    public static void showNoktalarimDialog(final Context context, DialogPointModel model, @NonNull final DialogCallback callback, String index, boolean selected) {
 
         dismissCurrentDialog();
         //Initialise Dialog

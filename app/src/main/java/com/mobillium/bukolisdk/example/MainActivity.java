@@ -134,7 +134,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .setBrandName2("Marka'dan")
                 .setButtonTextColor(0xFFFFFFFF)
                 .setButtonBackgroundColor(0xFFF8BA1B)
-                .setDarkThemeColor(0xFF3EFF00)
+                .setDarkThemeColor(0xFF3E3E3E)
                 .setShowPhoneDialog(false);
     }
 

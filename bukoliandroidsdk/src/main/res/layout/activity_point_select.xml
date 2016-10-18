@@ -153,16 +153,39 @@
                 android:layout_alignParentBottom="true"
                 android:background="@color/accentGrey">
 
+                <ImageView
+                    android:id="@+id/ivLogo"
+                    android:layout_width="46dp"
+                    android:layout_height="46dp"
+                    android:padding="5dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/icon_logo" />
+
                 <TextView
                     android:id="@+id/tvTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/ivLogo"
+                    android:layout_toLeftOf="@+id/ivInfoButton"
+                    android:layout_centerVertical="true"
                     android:gravity="center_vertical|left"
                     android:padding="10dp"
                     android:text="Ad Text"
                     android:textColor="@color/white"
                     android:textSize="18sp"
                     android:visibility="visible" />
+
+                <ImageView
+                    android:id="@+id/ivInfoButton"
+                    android:layout_width="46dp"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/icon_info" />
 
             </RelativeLayout>
 
@@ -183,11 +206,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_above="@+id/fab"
+                android:layout_alignParentRight="true"
                 android:layout_marginBottom="16dp"
                 android:layout_marginRight="16dp"
                 android:src="@drawable/icon_target"
                 app:layout_anchor="@id/fab"
-                android:layout_alignParentRight="true"
                 app:layout_anchorGravity="top" />
 
         </RelativeLayout>

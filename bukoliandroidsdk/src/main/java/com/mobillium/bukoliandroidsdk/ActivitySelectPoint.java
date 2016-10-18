@@ -147,7 +147,7 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
 
     View marker, centerMarker;
     TextView markerText;
-    ImageView markerImage, centerImage, ivCenter;
+    ImageView markerImage, centerImage, ivCenter,ivInfoButton;
     RelativeLayout rlCenterContainer;
     Handler mapHandler;
     boolean canMakeReq = false;
@@ -241,6 +241,7 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
         fab2 = (FloatingActionButton) findViewById(R.id.fab2);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         rlSearchView = (LinearLayout) findViewById(R.id.rlSearchView);
+        ivInfoButton = (ImageView) findViewById(R.id.ivInfoButton);
         ivCenter = (ImageView) findViewById(R.id.ivCenter);
         rlCenterContainer = (RelativeLayout) findViewById(R.id.rlCenterContainer);
         search_icon = (ImageView) findViewById(R.id.search_icon);
@@ -379,6 +380,13 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
             }
         });
 
+        ivInfoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Bukoli.getInstance().showInfoDialog(ActivitySelectPoint.this,null);
+            }
+        });
+
     }
 
     @Override
@@ -491,7 +499,7 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
 
                             BukoliPoint current = responsePoints.getData().get(i);
                             current.setIndex("" + (bukoliPoints.size() + 1));
-                            DialogPointModel dialogPointModel = new DialogPointModel(current.getName(), "", "", "", R.drawable.icon_koli_blank, current.getAddress(), current.getFakeHours(), current.getLarge_image_url(), current.getName());
+                            DialogPointModel dialogPointModel = new DialogPointModel(current.getName(), "", "", "", R.drawable.icon_map, current.getAddress(), current.getFakeHours(), current.getLarge_image_url(), current.getName());
                             current.setModel(dialogPointModel);
                             adapterNoktalarimItems.addItem(current, bukoliPoints.size());
                             MarkerOptions tempMarker;
