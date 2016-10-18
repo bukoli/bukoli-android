@@ -18,7 +18,6 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -186,7 +185,6 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
         initilizeMarkers();
         setListeners();
         createCallBacks();
-        initCollapsingToolbar();
 
 
         if (isOnline()) {
@@ -291,10 +289,14 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
 
     private void initializeToolbar() {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setPadding(0,0,0,0);//for tab otherwise give space in tab
+        toolbar.setContentInsetsAbsolute(0,0);
+        toolbar.setContentInsetStartWithNavigation(0);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setTitle("");
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Bukoli.getInstance().getButtonBackgroundColor()));
     }
 
@@ -724,12 +726,6 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
         }
         return super.onOptionsItemSelected(item);
 
-    }
-
-    private void initCollapsingToolbar() {
-        CollapsingToolbarLayout collapsingToolbarLayout =
-                (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
-        collapsingToolbarLayout.setContentScrimColor(getResources().getColor(R.color.bukoliYellow));
     }
 
 

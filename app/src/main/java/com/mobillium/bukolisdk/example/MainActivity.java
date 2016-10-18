@@ -17,8 +17,8 @@ import com.mobillium.bukoliandroidsdk.models.BukoliPoint;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     Button btBukoliPoint, btBukoliInfo;
-    Button btMarkafoniPoint, btMarkafoniInfo;
-    Button btKoctasPoint, btKoctasInfo;
+    Button btExample1Point, btExample1Info;
+    Button btExample2Point, btExample2Info;
     LinearLayout llContainer;
 
     @Override
@@ -34,10 +34,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         btBukoliPoint = (Button) findViewById(R.id.btBukoliPoint);
         btBukoliInfo = (Button) findViewById(R.id.btBukoliInfo);
-        btMarkafoniPoint = (Button) findViewById(R.id.btMarkafoniPoint);
-        btMarkafoniInfo = (Button) findViewById(R.id.btMarkafoniInfo);
-        btKoctasPoint = (Button) findViewById(R.id.btKoctasPoint);
-        btKoctasInfo = (Button) findViewById(R.id.btKoctasInfo);
+        btExample1Point = (Button) findViewById(R.id.btExample1Point);
+        btExample1Info = (Button) findViewById(R.id.btExample1Info);
+        btExample2Point = (Button) findViewById(R.id.btExample2Point);
+        btExample2Info = (Button) findViewById(R.id.btExample2Info);
         llContainer = (LinearLayout) findViewById(R.id.llContainer);
 
         setClickListeners();
@@ -109,20 +109,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 setBukoliStyle();
                 openInfoDialog();
                 break;
-            case R.id.btMarkafoniPoint:
-                setMarkafoniStyle();
+            case R.id.btExample1Point:
+                setExample1Style();
                 startSelection();
                 break;
-            case R.id.btMarkafoniInfo:
-                setMarkafoniStyle();
+            case R.id.btExample1Info:
+                setExample1Style();
                 openInfoDialog();
                 break;
-            case R.id.btKoctasPoint:
-                setKoctasStyle();
+            case R.id.btExample2Point:
+                setExample2Style();
                 startSelection();
                 break;
-            case R.id.btKoctasInfo:
-                setKoctasStyle();
+            case R.id.btExample2Info:
+                setExample2Style();
                 openInfoDialog();
                 break;
         }
@@ -138,10 +138,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .setShowPhoneDialog(false);
     }
 
-    private void setMarkafoniStyle() {
+    private void setExample1Style() {
         Bukoli.getInstance()
-                .setBrandName("Markafoni")
-                .setBrandName2("Markafoni'den")
+                .setBrandName("Example 1")
+                .setBrandName2("Example 1'den")
                 .setButtonTextColor(0xFFFFFFFF)
                 .setButtonBackgroundColor(0xFFAF005F)
                 .setDarkThemeColor(0xFF3E3E3E)
@@ -149,11 +149,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    private void setKoctasStyle() {
+    private void setExample2Style() {
 
         Bukoli.getInstance()
-                .setBrandName("Koçtaş")
-                .setBrandName2("Koçtaş'tan")
+                .setBrandName("Example 2")
+                .setBrandName2("Example 2'den")
                 .setButtonTextColor(0xFFFFFFFF)
                 .setButtonBackgroundColor(0xFFF68B1E)
                 .setDarkThemeColor(0xFF3E3E3E)

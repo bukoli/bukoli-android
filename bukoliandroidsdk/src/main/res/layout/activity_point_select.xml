@@ -17,32 +17,29 @@
             android:theme="@style/AppTheme.AppBarOverlay"
             app:contentScrim="@android:color/transparent">
 
-            <android.support.design.widget.CollapsingToolbarLayout
-                android:id="@+id/collapsing_toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:elevation="0dp"
-                app:contentScrim="@null"
-                app:layout_scrollFlags="scroll|exitUntilCollapsed">
-
 
                 <android.support.v7.widget.Toolbar
                     android:id="@+id/toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
                     android:background="?attr/colorPrimary"
+                    android:contentInsetLeft="20dp"
+                    android:contentInsetStart="0dp"
                     app:contentInsetLeft="0dp"
-                    app:contentInsetStart="0dp"
-                    app:layout_collapseMode="pin"
+                    app:contentInsetStart="20dp"
+                    android:contentInsetRight="0dp"
+                    android:contentInsetEnd="0dp"
+                    app:contentInsetRight="0dp"
+                    app:contentInsetEnd="0dp"
                     app:theme="@style/ToolbarStyleOverflow">
 
                     <LinearLayout
                         android:id="@+id/rlSearchView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="15dp"
+                        android:layout_marginRight="5dp"
                         android:background="@drawable/search_layer_pressed"
-                        android:gravity="center_vertical"
+                        android:gravity="center_vertical|left"
                         android:orientation="horizontal"
                         android:visibility="visible">
 
@@ -72,7 +69,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:background="@null"
-                                android:hint="Ara"
+                                android:hint="Aramak için cadde, sokak, mahalle yazınız"
                                 android:imeOptions="actionSearch"
                                 android:inputType="text"
                                 android:maxLines="1"
@@ -100,7 +97,6 @@
 
 
                 </android.support.v7.widget.Toolbar>
-            </android.support.design.widget.CollapsingToolbarLayout>
 
 
         </android.support.design.widget.AppBarLayout>

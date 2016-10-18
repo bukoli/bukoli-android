@@ -36,18 +36,18 @@
         style="@style/BukoliExampleTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Markafoni"
+        android:text="Example 1"
         android:textColor="@color/accentGrey" />
 
     <Button
-        android:id="@+id/btMarkafoniPoint"
+        android:id="@+id/btExample1Point"
         style="@style/BukoliExampleButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Select Point with phone number" />
 
     <Button
-        android:id="@+id/btMarkafoniInfo"
+        android:id="@+id/btExample1Info"
         style="@style/BukoliExampleButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -60,18 +60,18 @@
         style="@style/BukoliExampleTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Koçtaş"
+        android:text="Example 2"
         android:textColor="@color/accentGrey" />
 
     <Button
-        android:id="@+id/btKoctasPoint"
+        android:id="@+id/btExample2Point"
         style="@style/BukoliExampleButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Select Point" />
 
     <Button
-        android:id="@+id/btKoctasInfo"
+        android:id="@+id/btExample2Info"
         style="@style/BukoliExampleButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
