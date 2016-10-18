@@ -51,7 +51,8 @@ public class Bukoli {
     int buttonTextColor = 0xFFFFFFFF; //Default White
     int buttonBackgroundColor = 0xFFF8BA1B; //Default Bukoli Yellow
     int darkThemeColor = 0xFF3E3E3E; //Default Bukoli Grey
-    boolean showPhoneDialog = false;
+    boolean showPhoneDialog = false; //Default false
+    boolean isDebugEnabled = false; //Default false
 
     SelectPointCallBack callBack;
     InfoCallback infoCallback;
@@ -265,6 +266,21 @@ public class Bukoli {
     public Bukoli setShowPhoneDialog(boolean showPhoneDialog) {
         this.showPhoneDialog = showPhoneDialog;
         return getInstance();
+    }
+
+    public boolean isDebugEnabled() {
+        return isDebugEnabled;
+    }
+
+    /**
+     * This function sets the debug state of Bukoli SDK
+     * If it is true, Logs will appear on Android Monitor / LogCat
+     * If it is false Logs will not appear on Android Monitor / LogCat
+     *
+     * @param debugEnabled the boolean value of debug is enabled or not
+     */
+    public void setDebugEnabled(boolean debugEnabled) {
+        isDebugEnabled = debugEnabled;
     }
 
     public static int convertDpiToPixel(int dpi) {

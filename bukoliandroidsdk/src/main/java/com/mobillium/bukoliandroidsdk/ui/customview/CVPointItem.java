@@ -37,7 +37,6 @@ public class CVPointItem extends ForegroundLinearLayout {
 
     public void init() {
         LayoutInflater.from(mContext).inflate(R.layout.customview_point_items, this);
-        //
         tvTitle = (TextView) findViewById(R.id.tvTitle);
         btSend = (TextView) findViewById(R.id.btSend);
         ivPoint = (ImageView) findViewById(R.id.ivPoint);
@@ -64,11 +63,7 @@ public class CVPointItem extends ForegroundLinearLayout {
                 @Override
                 public void onClick(View v) {
                     onButtonClickListener.onClick(rowData);
-//                    if (rowData.getModel() != null) {
-//                        DialogHelper.showNoktalarimDialog(getContext(), rowData.getModel(), callback, rowData.getIndex(), rowData.is_favorite());
-//                    } else {
-//                        //TODO something
-//                    }
+
                 }
             });
         }

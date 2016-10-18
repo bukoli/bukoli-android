@@ -22,6 +22,7 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -30,7 +31,6 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -70,6 +70,7 @@ import com.mobillium.bukoliandroidsdk.ui.BaseActivity;
 import com.mobillium.bukoliandroidsdk.ui.FragmentSearchList;
 import com.mobillium.bukoliandroidsdk.ui.adapter.AdapterPoints;
 import com.mobillium.bukoliandroidsdk.ui.customview.CVPointItem;
+import com.mobillium.bukoliandroidsdk.utils.BukoliLogger;
 import com.mobillium.bukoliandroidsdk.utils.DialogCallback;
 import com.mobillium.bukoliandroidsdk.utils.DialogHelper;
 import com.mobillium.bukoliandroidsdk.webservice.ServiceCallback;
@@ -97,8 +98,6 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
     double currentLongitude = 41.043609;
     double targetLatitude = 29.0092983;
     double targetLongitude = 41.043609;
-    double centertLatitude = 38.985808;
-    double centerLongitude = 35.425071;
     private LocationRequest mLocationRequest;
     ProgressDialog progressDialog;
 
@@ -171,6 +170,7 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
         super.onDestroy();
         if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
             mGoogleApiClient.disconnect();
+            BukoliLogger.writeInfoLog(getString(R.string.sdk_map_services_disconnected));
         }
     }
 
@@ -189,6 +189,7 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
 
 
         if (isOnline()) {
+            BukoliLogger.writeInfoLog(getString(R.string.sdk_connected));
             canMakeReq = true;
             mGoogleApiClient = new GoogleApiClient.Builder(this)
                     .addConnectionCallbacks(this)
@@ -206,6 +207,8 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
 
             mapHandler = new Handler();
 
+        } else {
+            BukoliLogger.writeInfoLog(getString(R.string.sdk_not_connected));
         }
 
 
@@ -249,25 +252,29 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+
+        //List Items
         adapterNoktalarimItems = new AdapterPoints(bukoliPoints, ActivitySelectPoint.this, onButtonClickListener);
         recyclerView.setHasFixedSize(true);
-
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(ActivitySelectPoint.this);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapterNoktalarimItems);
-        fab.setBackgroundTintList(ColorStateList.valueOf(Bukoli.getInstance().getButtonBackgroundColor()));
 
+        //SearchView Style
+        Drawable searchLayer = ContextCompat.getDrawable(this, R.drawable.search_layer_pressed);
+        searchLayer.mutate().setColorFilter(Bukoli.getInstance().getButtonTextColor(), PorterDuff.Mode.SRC_ATOP);
+        rlSearchView.setBackground(searchLayer);
         search_icon.setColorFilter(Bukoli.getInstance().getButtonTextColor());
         search_icon_left.setColorFilter(Bukoli.getInstance().getButtonTextColor());
         etSearchMain.setTextColor(Bukoli.getInstance().getButtonTextColor());
         etSearchMain.setHintTextColor(Bukoli.getInstance().getButtonTextColor());
         setCursorDrawableColor(etSearchMain, Bukoli.getInstance().getButtonTextColor());
+
+
+        //FAB List-Map Style
+        fab.setBackgroundTintList(ColorStateList.valueOf(Bukoli.getInstance().getButtonBackgroundColor()));
         setFabIcon(TYPE_MAP);
-
-        Drawable searchLayer = ContextCompat.getDrawable(this, R.drawable.search_layer_pressed);
-        searchLayer.mutate().setColorFilter(Bukoli.getInstance().getButtonTextColor(), PorterDuff.Mode.SRC_ATOP);
-        rlSearchView.setBackground(searchLayer);
-
+        //FAB Current Location Style
         Drawable myFabSrc = ContextCompat.getDrawable(this, R.drawable.icon_target);
         Drawable willBeWhite = myFabSrc.getConstantState().newDrawable();
         willBeWhite.mutate().setColorFilter(Bukoli.getInstance().getDarkThemeColor(), PorterDuff.Mode.SRC_ATOP);
@@ -289,7 +296,7 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
         marker = ((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.custom_marker_layout, null);
         markerText = (TextView) marker.findViewById(R.id.tvNumber);
         markerImage = (ImageView) marker.findViewById(R.id.markerImage);
-        markerText.setText("27");
+        markerText.setText("1");
         markerImage.setColorFilter(Bukoli.getInstance().getButtonBackgroundColor(), PorterDuff.Mode.SRC_ATOP);
 
         Drawable markerLayer = ContextCompat.getDrawable(this, R.drawable.timer_circle_stroke);
@@ -422,7 +429,7 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
                             handler.postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
-                                    DialogModel dialogModel = new DialogModel("", "", "EKLE", "VAZGEÇ", R.drawable.icon_map);
+                                    DialogModel dialogModel = new DialogModel("", "", "", "", R.drawable.icon_map);
                                     DialogHelper.showPhoneNumberDialog(ActivitySelectPoint.this, dialogModel, new DialogCallback() {
                                         @Override
                                         public void pressed(int whichButton) {
@@ -475,7 +482,6 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
 
                 try {
                     if (e == null) {
-                        mMap.setOnCameraChangeListener(null);
                         ResponsePoints responsePoints = Bukoli.getInstance().getGson().fromJson(result, ResponsePoints.class);
                         markers.clear();
 
@@ -483,7 +489,7 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
 
                             BukoliPoint current = responsePoints.getData().get(i);
                             current.setIndex("" + (bukoliPoints.size() + 1));
-                            DialogPointModel dialogPointModel = new DialogPointModel(current.getName(), "", "SEÇ", "VAZGEÇ", R.drawable.icon_koli_blank, current.getAddress(), current.getFakeHours(), current.getLarge_image_url(), current.getName());
+                            DialogPointModel dialogPointModel = new DialogPointModel(current.getName(), "", "", "", R.drawable.icon_koli_blank, current.getAddress(), current.getFakeHours(), current.getLarge_image_url(), current.getName());
                             current.setModel(dialogPointModel);
                             adapterNoktalarimItems.addItem(current, bukoliPoints.size());
                             MarkerOptions tempMarker;
@@ -582,9 +588,9 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
 
                     // Is the marker the same marker that was already open
                     if (lastOpenned.equals(marker)) {
-                        // Nullify the lastOpenned object
+                        // Nullify the lastOpened object
                         lastOpenned = null;
-                        // Return so that the info window isn't openned again
+                        // Return so that the info window isn't opened again
                         return true;
                     }
                 }
@@ -592,7 +598,7 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
                 // Open the info window for the marker
                 marker.showInfoWindow();
                 findPoint(marker);
-                // Re-assign the last openned such that we can close it later
+                // Re-assign the last opened such that we can close it later
                 lastOpenned = marker;
                 // Event was handled by our code do not launch default behaviour.
                 return true;
@@ -622,7 +628,7 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
 
     @Override
     public void onConnected(Bundle bundle) {
-        Log.i("BUKOLI", "Bukoli Location services connected.");
+        BukoliLogger.writeInfoLog(getString(R.string.sdk_map_services_connected));
         if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
                 || ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
@@ -644,7 +650,7 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
 
     @Override
     public void onConnectionSuspended(int i) {
-        Log.i("BUKOLI", "BukoliLocation services suspended. Please reconnect.");
+        BukoliLogger.writeInfoLog(getString(R.string.sdk_map_services_suspended));
     }
 
     @Override
@@ -657,13 +663,15 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
                 e.printStackTrace();
             }
         } else {
-            Log.i("BUKOLI", "BukoliLocation services connection failed with code " + connectionResult.getErrorCode());
+            BukoliLogger.writeErrorLog(getString(R.string.sdk_map_services_failed) + connectionResult.getErrorCode());
         }
     }
 
     private void handleNewLocation(Location location, boolean isFake) {
         try {
-            progressDialog.dismiss();
+            if (progressDialog != null && progressDialog.isShowing()) {
+                progressDialog.dismiss();
+            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -675,9 +683,6 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
 
 
         if (canPinLocation) {
-            LatLng currentLoc = new LatLng(currentLatitude, currentLongitude);
-//            mMap.moveCamera(CameraUpdateFactory.newLatLng(currentLoc));
-//            mMap.moveCamera(CameraUpdateFactory.zoomTo(16));
             CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(currentLatitude, currentLongitude), 14);
             mMap.animateCamera(cameraUpdate);
             lastPosition = mMap.getCameraPosition();
@@ -734,10 +739,7 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
         params.put("longitude", "" + targetLongitude);
         ServiceOperations.serviceReq(getApplicationContext(), Request.Method.GET, "point", params, callbackPoints);
 
-        progressDialog = new ProgressDialog(ActivitySelectPoint.this);
-        progressDialog.setMessage("Bukoli noktaları yükleniyor...");
-        progressDialog.show();
-        progressDialog.setCanceledOnTouchOutside(false);
+        showProgress(getString(R.string.sdk_points_loading));
 
 
     }
@@ -751,10 +753,7 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
         params.put("place_id", lastSearchId);
         ServiceOperations.serviceReq(getApplicationContext(), Request.Method.GET, "point", params, callbackPoints);
 
-        progressDialog = new ProgressDialog(ActivitySelectPoint.this);
-        progressDialog.setMessage("Bukoli noktaları yükleniyor...");
-        progressDialog.show();
-        progressDialog.setCanceledOnTouchOutside(false);
+        showProgress(getString(R.string.sdk_points_loading));
     }
 
     private void makeAutoCompleteReq() {
@@ -774,8 +773,7 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
             LocationManager locationManager = (LocationManager) getSystemService(
                     Context.LOCATION_SERVICE);
             if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                //TODO buradaki error custom olacak
-                DialogModel modelLocation = new DialogModel("Konum Özelliği Kapalı!", "Cihazınızın GPS özelliğini aktif hale getirmek için ayarlar butonuna dokununuz.", "AYARLAR", "VAZGEÇ", R.drawable.icon_map);
+                DialogModel modelLocation = new DialogModel(getString(R.string.dialog_gps_title), getString(R.string.dialog_gps_text), getString(R.string.dialog_gps_settings_button), getString(R.string.dialog_gps_cancel_button), R.drawable.icon_map);
                 DialogHelper.showCommonDialog(ActivitySelectPoint.this, modelLocation, callbackDialogLoc);
             } else {
                 if (mGoogleApiClient.isConnected()) {
@@ -811,14 +809,26 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
                     LocationManager locationManager = (LocationManager) getSystemService(
                             Context.LOCATION_SERVICE);
                     if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                        progressDialog = new ProgressDialog(ActivitySelectPoint.this);
-                        progressDialog.setMessage("Konumunuz belirleniyor...");
-                        progressDialog.show();
-                        progressDialog.setCanceledOnTouchOutside(false);
+                        showProgress(getString(R.string.location_loading));
                     }
                     break;
             }
         }
+    }
+
+    private void showProgress(String message) {
+        progressDialog = new ProgressDialog(ActivitySelectPoint.this);
+        progressDialog.setMessage(message);
+        try {
+            Drawable drawable = new ProgressBar(ActivitySelectPoint.this).getIndeterminateDrawable().mutate();
+            drawable.setColorFilter(Bukoli.getInstance().getButtonBackgroundColor(), PorterDuff.Mode.SRC_IN);
+            progressDialog.setIndeterminateDrawable(drawable);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        progressDialog.show();
+        progressDialog.setCanceledOnTouchOutside(false);
     }
 
     private void getCurrentLocation() {
@@ -844,12 +854,10 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
-                    // permission was granted, yay! Do the
-                    // contacts-related task you need to do.
+                    // permission was granted,
 
                     verifyLocation();
                 } else {
-//                    showSnackBar("Bildirimde bulunabilmek için konum izni vermelisiniz.");
                     // functionality that depends on this permission.
                     handleNewLocation(null, true);
                 }
@@ -879,32 +887,6 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
 
         return bitmap;
     }
-
-    // Convert a view to bitmap
-    private Bitmap createDrawableFromView() {
-
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        centerMarker.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT));
-        centerMarker.measure(displayMetrics.widthPixels, displayMetrics.heightPixels);
-        centerMarker.layout(0, 0, displayMetrics.widthPixels, displayMetrics.heightPixels);
-        centerMarker.buildDrawingCache();
-        Bitmap bitmap = Bitmap.createBitmap(centerMarker.getMeasuredWidth(), centerMarker.getMeasuredHeight(), Bitmap.Config.ARGB_8888);
-
-        Canvas canvas = new Canvas(bitmap);
-        centerMarker.draw(canvas);
-
-        return bitmap;
-    }
-
-
-    public static int convertToPixels(Context context, int nDP) {
-        final float conversionScale = context.getResources().getDisplayMetrics().density;
-
-        return (int) ((nDP * conversionScale) + 0.5f);
-
-    }
-
 
     private final TextWatcher mTextEditorWatcher = new TextWatcher() {
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -1031,17 +1013,6 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
 
     }
 
-
-//    GoogleMap.OnCameraChangeListener cameraChangeListener = new GoogleMap.OnCameraChangeListener() {
-//        @Override
-//        public void onCameraChange(CameraPosition cameraPosition) {
-//
-//
-//
-//
-//        }
-//    };
-
     GoogleMap.OnCameraIdleListener cameraIdleListener = new GoogleMap.OnCameraIdleListener() {
         @Override
         public void onCameraIdle() {
@@ -1086,7 +1057,7 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        DialogModel dialogModel = new DialogModel("", "", "EKLE", "VAZGEÇ", R.drawable.icon_map);
+                        DialogModel dialogModel = new DialogModel("", "", "", "", R.drawable.icon_map);
                         DialogHelper.showPhoneNumberDialog(ActivitySelectPoint.this, dialogModel, new DialogCallback() {
                             @Override
                             public void pressed(int whichButton) {
@@ -1114,18 +1085,6 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
     };
 
 
-//    private void addmarkerToCenterPoint(long delay) {
-//        Handler handler = new Handler();
-//        handler.postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                LatLng currentLoc = new LatLng(mMap.getCameraPosition().target.latitude, mMap.getCameraPosition().target.longitude);
-//                mMap.addMarker(new MarkerOptions().position(currentLoc).zIndex(100).title("Merkez konum").icon(BitmapDescriptorFactory.fromBitmap(createDrawableFromView())));
-//
-//            }
-//        }, delay);
-//    }
-
     public static void setCursorDrawableColor(EditText editText, int color) {
         try {
             Field fCursorDrawableRes =
@@ -1141,8 +1100,8 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
 
             Drawable[] drawables = new Drawable[2];
             Resources res = editText.getContext().getResources();
-            drawables[0] = res.getDrawable(mCursorDrawableRes);
-            drawables[1] = res.getDrawable(mCursorDrawableRes);
+            drawables[0] = ResourcesCompat.getDrawable(res, mCursorDrawableRes, null);
+            drawables[1] = ResourcesCompat.getDrawable(res, mCursorDrawableRes, null);
             drawables[0].setColorFilter(color, PorterDuff.Mode.SRC_IN);
             drawables[1].setColorFilter(color, PorterDuff.Mode.SRC_IN);
             fCursorDrawable.set(editor, drawables);

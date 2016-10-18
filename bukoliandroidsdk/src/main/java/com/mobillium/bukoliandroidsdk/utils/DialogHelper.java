@@ -38,6 +38,7 @@ public class DialogHelper {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialog_template);
         dialog.setCanceledOnTouchOutside(false);
+        dialog.setCancelable(false);
 
         //Create Views
         TextView btNegative = (TextView) dialog.findViewById(R.id.btNegative);
@@ -50,6 +51,8 @@ public class DialogHelper {
         tvDialogTitle.setText(model.getTitle());
         tvDialogDesc.setText(model.getDesc());
         btPositive.setText(model.getBtPositive());
+        btPositive.setBackgroundColor(Bukoli.getInstance().getButtonBackgroundColor());
+        btPositive.setTextColor(Bukoli.getInstance().getButtonTextColor());
         btNegative.setText(model.getBtNegative());
         icDialogTitle.setImageResource(model.getIconResId());
 
@@ -248,7 +251,7 @@ public class DialogHelper {
                     callback.pressed(POSITIVE_BUTTON, etDialogTakip.getOnlyNumberText(), "");
                     dialog.dismiss();
                 } else {
-                    Toast.makeText(context, "Lütfen gerekli alanları doldurunuz.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, context.getString(R.string.sdk_number_missing_error), Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -271,7 +274,6 @@ public class DialogHelper {
         dialog.show();
 
     }
-
 
 
 }

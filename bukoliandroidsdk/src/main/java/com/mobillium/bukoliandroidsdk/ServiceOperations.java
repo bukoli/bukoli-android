@@ -5,7 +5,6 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.text.TextUtils;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -16,6 +15,7 @@ import com.android.volley.Response.Listener;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.mobillium.bukoliandroidsdk.utils.BukoliLogger;
 import com.mobillium.bukoliandroidsdk.webservice.ServiceCallback;
 import com.mobillium.bukoliandroidsdk.webservice.ServiceError;
 import com.mobillium.bukoliandroidsdk.webservice.ServiceException;
@@ -28,7 +28,6 @@ import java.util.Map;
 
 //
 public class ServiceOperations {
-    //    private static String baseUrl = Bukoli.url;
     public static ProgressDialog pd;
     private static final String DEFAULT_PARAMS_ENCODING = "UTF-8";
 
@@ -51,7 +50,7 @@ public class ServiceOperations {
                         + encodeParameters(params, DEFAULT_PARAMS_ENCODING);
             }
 
-            Log.d("WebServis", "İstek yapılan url: " + url);
+            BukoliLogger.writeInfoLog(mContext.getString(R.string.sdk_webservice_request_log) + url);
             if (pdString != null) {
                 try {
                     pd = ProgressDialog.show(mContext, null, pdString);
@@ -76,8 +75,7 @@ public class ServiceOperations {
                                 }
                             }
 
-                            Log.d("WebServis", "Servis cevabı : " +
-                                    response);
+                            BukoliLogger.writeInfoLog(mContext.getString(R.string.sdk_webservice_response_log) + response);
                             callback.done(response, null);
                         }
                     }, new ErrorListener() {
@@ -92,16 +90,14 @@ public class ServiceOperations {
                             ex.printStackTrace();
                         }
                     }
-                    Log.d("WebServis", "Servis cevabı : " + error);
-
+                    BukoliLogger.writeInfoLog(mContext.getString(R.string.sdk_webservice_response_log) + error);
                     String decoded = "";
                     ServiceError serviceError = null;
 
                     try {
                         decoded = new String(
                                 error.networkResponse.data, "UTF-8");
-                        Log.d("WebServis", "Servis cevabı : " +
-                                decoded);
+                        BukoliLogger.writeInfoLog(mContext.getString(R.string.sdk_webservice_response_log) + decoded);
                         serviceError = Bukoli.getInstance().getGson()
                                 .fromJson(decoded, ServiceError.class);
 
@@ -114,7 +110,7 @@ public class ServiceOperations {
 
                     if (TextUtils.isEmpty(decoded)) {
                         serviceException = new ServiceException(
-                                "Bir hata oluştu, lütfen tekrar deneyiniz.",
+                                mContext.getString(R.string.sdk_webservice_response_error),
                                 false, serviceError);
                     } else {
                         serviceException = new ServiceException(
@@ -125,7 +121,7 @@ public class ServiceOperations {
                     if (error instanceof TimeoutError) {
                         //demo icin hata verme
                         Toast.makeText(mContext,
-                                "Lütfen Internet bağlantınızı kontrol ediniz. ",
+                                mContext.getString(R.string.sdk_webservice_connection_error),
                                 Toast.LENGTH_SHORT).show();
                     } else {
                         try {
@@ -142,7 +138,7 @@ public class ServiceOperations {
                         } catch (Exception ex) {
                             ex.printStackTrace();
                             Toast.makeText(mContext,
-                                    "Lütfen Internet bağlantınızı kontrol ediniz. ",
+                                    mContext.getString(R.string.sdk_webservice_connection_error),
                                     Toast.LENGTH_SHORT).show();
                         }
 
@@ -183,10 +179,10 @@ public class ServiceOperations {
         } else {
 
             Toast.makeText(mContext,
-                    "Lütfen internet bağlantınızı kontrol ediniz.",
+                    mContext.getString(R.string.sdk_webservice_connection_error),
                     Toast.LENGTH_SHORT).show();
             callback.done(null, new ServiceException(
-                    "Lütfen internet bağlantınızı kontrol ediniz.", true));
+                    mContext.getString(R.string.sdk_webservice_connection_error), true));
         }
     }
 
@@ -196,7 +192,7 @@ public class ServiceOperations {
                 .iterator();
         while (entries.hasNext()) {
             Map.Entry<String, String> entry = entries.next();
-            Log.d("WebServis", "Key = " + entry.getKey() + ", Value = " + entry.getValue());
+            BukoliLogger.writeResponseLog("Key = " + entry.getKey() + ", Value = " + entry.getValue());
         }
     }
 

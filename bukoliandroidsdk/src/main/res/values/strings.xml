@@ -1,18 +1,38 @@
 <resources>
     <string name="app_name">Bukoli Android SDK</string>
+
     <string name="ok_button">Tamam</string>
-    <string name="progress_message">Lutfen bekleyiniz...</string>
+    <string name="progress_message">Lütfen bekleyiniz&#8230;</string>
+    <string name="sdk_points_loading">Bukoli noktaları yükleniyor&#8230;</string>
+    <string name="location_loading">Konumunuz belirleniyor&#8230;</string>
     <string name="dialog_title">Bukoli Nedir?</string>
     <string name="dialog_description">Bukoli, %1$s aldığınız ürünleri, ister mesai sonrası, isterseniz de yolunuzun üsründen kısacası size neresi uygunsa oradan teslim almanızı sağlayan yepyeni bir sistem. Anlaşmalı Bukoli noktalarından size en uygunu seçin ve kolinizi teslim alın.</string>
     <string name="dialog_row_1"> %1$s alışverişinizi tamamlayın ve teslimat seçeneklerinde Bukoliyi seçin</string>
     <string name="dialog_row_2">Size en uygun Bukoli noktasını haritadan seçin</string>
     <string name="dialog_row_3">Cep telefonunuza gelen sms bilgilerini saklayın</string>
     <string name="dialog_row_4">Seçtiğiniz Bukoli teslimat noktasında teslimat kodunu paylaşın ve kolinizi güvenle teslim alın</string>
-
     <string name="dialog_workhours">Hafta içi: 09:30 - 24:00 \nCumartesi: 10:30 - 24:00\nPazar: 10:30 - 23:00</string>
-    <string name="sdk_init_error">You must initialize the Bukoli SDK first</string>
 
-<!--<string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">-->
-        <!--AIzaSyA4VOgjHdZupbe0YT5t7fUtWryoytRIjz8-->
-    <!--</string>-->
+    <!--Location Permission Dialog-->
+    <string name="dialog_gps_title">Konum Özelliği Kapalı!</string>
+    <string name="dialog_gps_text">Cihazınızın GPS özelliğini aktif hale getirmek için ayarlar butonuna dokununuz.</string>
+    <string name="dialog_gps_settings_button">AYARLAR</string>
+    <string name="dialog_gps_cancel_button">VAZGEÇ</string>
+
+    <!--Toast Messages-->
+    <string name="sdk_number_missing_error">Lütfen numara alanını doldurunuz.</string>
+    <string name="sdk_webservice_connection_error">Lütfen Internet bağlantınızı kontrol ediniz.</string>
+    <string name="sdk_webservice_response_error">Bir hata oluştu, lütfen tekrar deneyiniz.</string>
+
+    <!--SDK Logs-->
+    <string name="sdk_init_error">You must initialize the Bukoli SDK first</string>
+    <string name="sdk_webservice_response_log">Webservice Response: </string>
+    <string name="sdk_webservice_request_log">Request URL: </string>
+    <string name="sdk_not_connected">Device is not connected to the Internet</string>
+    <string name="sdk_connected">Device is Online</string>
+    <string name="sdk_map_services_connected">Google Location services connected.</string>
+    <string name="sdk_map_services_disconnected">Bukoli Location services disconnected.</string>
+    <string name="sdk_map_services_suspended">Google Location services suspended. Please reconnect.</string>
+    <string name="sdk_map_services_failed">Google Location services connection failed with code </string>
+
 </resources>

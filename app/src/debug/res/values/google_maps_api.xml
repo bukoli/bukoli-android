@@ -1,7 +1,5 @@
 <resources>
     <!--
-    TODO: Before you run your application, you need a Google Maps API key.
-
     To get one, follow this link, follow the directions and press "Create" at the end:
 
     https://console.developers.google.com/flows/enableapi?apiid=maps_android_backend&keyType=CLIENT_SIDE_ANDROID&r=FC:A5:5D:DF:06:E1:C6:2C:BA:E6:C3:8C:59:B5:3E:40:35:C7:58:12%3Bcom.mobillium.bukolisdk.example
