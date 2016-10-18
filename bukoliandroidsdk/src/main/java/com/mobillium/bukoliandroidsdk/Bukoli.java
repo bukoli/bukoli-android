@@ -243,7 +243,7 @@ public class Bukoli {
 
 
     /**
-     * This function sets the dark theme color of Pressed State of Button background and returns the Instance of Bukoli
+     * This function sets the dark theme color of dark icons(such as close, map center, target etc.) and returns the Instance of Bukoli
      *
      * @param darkThemeColor the dark color integer value
      */

@@ -281,6 +281,8 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
         fab2.setImageDrawable(willBeWhite);
         fab2.setBackgroundTintList(ColorStateList.valueOf(Bukoli.getInstance().getButtonTextColor()));
 
+        ivCenter.setColorFilter(Bukoli.getInstance().getDarkThemeColor(), PorterDuff.Mode.SRC_ATOP);
+
     }
 
     private void initializeToolbar() {

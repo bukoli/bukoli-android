@@ -29,6 +29,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //Initialize Bukoli SDK with Application context and API Key
         Bukoli.sdkInitialize(getApplicationContext(), "e6fa17c9-6168-4124-87c7-4b2310d1b4f9");
 
+        //Set Debug mode enabled or disabled
+        Bukoli.getInstance().setDebugEnabled(true); // or false
 
         btBukoliPoint = (Button) findViewById(R.id.btBukoliPoint);
         btBukoliInfo = (Button) findViewById(R.id.btBukoliInfo);
@@ -132,6 +134,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .setBrandName2("Marka'dan")
                 .setButtonTextColor(0xFFFFFFFF)
                 .setButtonBackgroundColor(0xFFF8BA1B)
+                .setDarkThemeColor(0xFF3EFF00)
                 .setShowPhoneDialog(false);
     }
 
@@ -141,6 +144,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .setBrandName2("Markafoni'den")
                 .setButtonTextColor(0xFFFFFFFF)
                 .setButtonBackgroundColor(0xFFAF005F)
+                .setDarkThemeColor(0xFF3E3E3E)
                 .setShowPhoneDialog(true);
 
     }
@@ -152,6 +156,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .setBrandName2("Koçtaş'tan")
                 .setButtonTextColor(0xFFFFFFFF)
                 .setButtonBackgroundColor(0xFFF68B1E)
+                .setDarkThemeColor(0xFF3E3E3E)
                 .setShowPhoneDialog(false);
 
 

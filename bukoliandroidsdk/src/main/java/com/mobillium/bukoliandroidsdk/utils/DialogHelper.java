@@ -3,6 +3,7 @@ package com.mobillium.bukoliandroidsdk.utils;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.StateListDrawable;
 import android.text.TextUtils;
 import android.util.StateSet;
@@ -118,6 +119,7 @@ public class DialogHelper {
                 dialog.dismiss();
             }
         });
+        ivCloseButton.setColorFilter(Bukoli.getInstance().getDarkThemeColor(), PorterDuff.Mode.SRC_ATOP);
 
         dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
@@ -187,6 +189,8 @@ public class DialogHelper {
             }
         });
 
+
+        ivIconItem.setColorFilter(Bukoli.getInstance().getDarkThemeColor(), PorterDuff.Mode.SRC_ATOP);
         ivIconItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -256,6 +260,7 @@ public class DialogHelper {
             }
         });
 
+        ivIconItem.setColorFilter(Bukoli.getInstance().getDarkThemeColor(), PorterDuff.Mode.SRC_ATOP);
         ivIconItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
