@@ -7,6 +7,8 @@
 [![Maven Central](https://img.shields.io/maven-central/v/com.github.dcendents/android-maven-gradle-plugin.svg)](http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22android-maven-gradle-plugin%22)
 
 
+![Screenshots](https://github.com/bukoli/bukoli-android/blob/master/art/readmescreenshots.png)
+
 You can sign up for a Bukoli account at http://www.bukoli.com.
 
 ## Requirements
@@ -86,6 +88,15 @@ import com.mobillium.bukoliandroidsdk.Bukoli;
 Bukoli.sdkInitialize(getApplicationContext(), "your api key");
 ```
 
+### Enable Debug
+To enable debugging logs, you need to call setDebugEnabled(boolean) method.
+```java
+import com.mobillium.bukoliandroidsdk.Bukoli;
+
+Bukoli.getInstance().setDebugEnabled(true); // or false for disable
+```
+
+
 ### Customization
 
 ```java
@@ -96,6 +107,7 @@ Bukoli.getInstance()
                 .setBrandName2("Marka'dan") // Ablative Brand Name for info dialog
                 .setButtonTextColor(0xFFFFFFFF) // Text Colors on button
                 .setButtonBackgroundColor(0xFFF8BA1B) // Button background color
+                .setDarkThemeColor(0xFF3E3E3E) // Theme Dark color such as close, map center, target etc.
                 .setShowPhoneDialog(false); // If you want to ask user phone number for Bukoli point
                 
 ```
