@@ -15,6 +15,7 @@
         <item name="android:textColor">@color/accentGrey</item>
         <item name="android:gravity">center_vertical|left</item>
         <item name="android:paddingLeft">20dp</item>
+        <item name="android:textAllCaps">false</item>
 
     </style>
 
