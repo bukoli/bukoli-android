@@ -13,7 +13,7 @@ You can sign up for a Bukoli account at http://www.bukoli.com.
 
 ## Requirements
 
-- Android  16+
+- Android  4.1+
 - Android Studio 1.0.0+
 - JDK 1.8+
 
@@ -35,7 +35,7 @@ You can use Gradle or Maven to add the library as aar dependency to your build.
 <dependency>
   <groupId>com.mobillium.bukoliandroidsdk</groupId>
   <artifactId>bukoliandroidsdk</artifactId>
-  <version>1.0.0</version>
+  <version>1.0.6</version>
   <type>pom</type>
 </dependency>
 ```
