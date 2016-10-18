@@ -164,7 +164,7 @@
                     android:src="@drawable/icon_logo" />
 
                 <TextView
-                    android:id="@+id/tvTitle"
+                    android:id="@+id/tvInfo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_toRightOf="@+id/ivLogo"
@@ -181,7 +181,7 @@
                     android:id="@+id/ivInfoButton"
                     android:layout_width="46dp"
                     android:layout_height="wrap_content"
-                    android:padding="10dp"
+                    android:padding="7dp"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:adjustViewBounds="true"

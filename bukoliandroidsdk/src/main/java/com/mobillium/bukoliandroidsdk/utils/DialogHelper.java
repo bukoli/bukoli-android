@@ -168,12 +168,16 @@ public class DialogHelper {
         TextView tvDialogTitle = (TextView) dialog.findViewById(R.id.tvDialogTitle);
         TextView tvDialogNoktalarimAddress = (TextView) dialog.findViewById(R.id.tvDialogNoktalarimAddress);
         TextView tvDialogSaatler = (TextView) dialog.findViewById(R.id.tvDialogSaatler);
+        TextView tvDistance = (TextView) dialog.findViewById(R.id.tvDistance);
         ImageView ivIconItem = (ImageView) dialog.findViewById(R.id.ivIconItem);
         ImageView ivPoint = (ImageView) dialog.findViewById(R.id.ivPoint);
         //Set data
         tvDialogTitle.setText(model.getTitle());
         tvDialogSaatler.setText(model.getHours());
+        tvDistance.setText(model.getDistance());
         tvDialogNoktalarimAddress.setText(model.getAddress());
+
+        tvDistance.setBackground(ShapeCreator.createStrokeBg());
 
         Glide.with(context).load(model.getUrl()).crossFade().into(ivPoint);
 

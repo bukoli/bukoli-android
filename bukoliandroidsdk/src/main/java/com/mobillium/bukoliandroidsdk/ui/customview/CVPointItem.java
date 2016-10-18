@@ -20,7 +20,7 @@ import com.mobillium.bukoliandroidsdk.utils.ShapeCreator;
 public class CVPointItem extends ForegroundLinearLayout {
     Context mContext;
     BukoliPoint currentData;
-    TextView tvTitle, btSend;
+    TextView tvTitle, btSend, tvDistance;
     ImageView ivPoint;
 
     public CVPointItem(Context context, AttributeSet attrs) {
@@ -39,6 +39,7 @@ public class CVPointItem extends ForegroundLinearLayout {
         LayoutInflater.from(mContext).inflate(R.layout.customview_point_items, this);
         tvTitle = (TextView) findViewById(R.id.tvTitle);
         btSend = (TextView) findViewById(R.id.btSend);
+        tvDistance = (TextView) findViewById(R.id.tvDistance);
         ivPoint = (ImageView) findViewById(R.id.ivPoint);
 
         //Selector
@@ -48,6 +49,8 @@ public class CVPointItem extends ForegroundLinearLayout {
 
         btSend.setBackground(stateListDrawable);
         btSend.setTextColor(Bukoli.getInstance().getButtonTextColor());
+        tvDistance.setBackground(ShapeCreator.createStrokeBg());
+
 
     }
 
@@ -57,6 +60,7 @@ public class CVPointItem extends ForegroundLinearLayout {
             currentData = rowData;
 
             tvTitle.setText(rowData.getName());
+            tvDistance.setText(rowData.getDistance());
             Glide.with(getContext()).load(rowData.getModel().getUrl()).crossFade().into(ivPoint);
 
             btSend.setOnClickListener(new OnClickListener() {

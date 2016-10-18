@@ -113,10 +113,10 @@ public class BukoliPoint {
 
         try {
             int x = (int) Math.floor(Double.valueOf(distance));
-            return "" + x + " metre";
+            return "" + x + " m";
         } catch (Exception ex) {
             ex.printStackTrace();
-            return distance + " metre";
+            return distance + " m";
         }
 
     }

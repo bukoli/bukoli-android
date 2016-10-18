@@ -33,6 +33,16 @@ public class ShapeCreator {
         return shape1;
     }
 
+    public static Drawable createStrokeBg() {
+
+        GradientDrawable shape1 = new GradientDrawable();
+        shape1.setColor(0xCCFFFFFF); // white
+        shape1.setCornerRadius(Bukoli.getInstance().convertDpiToPixel(5));
+        shape1.setStroke(Bukoli.getInstance().convertDpiToPixel(1), getDarker(0xCCFFFFFF, 0.85f)); // white darker
+
+        return shape1;
+    }
+
     public static Drawable createStrokeButtonPressed() {
 
         GradientDrawable shape1 = new GradientDrawable();

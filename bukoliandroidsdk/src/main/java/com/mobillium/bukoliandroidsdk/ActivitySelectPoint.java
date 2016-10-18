@@ -65,6 +65,7 @@ import com.mobillium.bukoliandroidsdk.models.BukoliLocation;
 import com.mobillium.bukoliandroidsdk.models.BukoliPoint;
 import com.mobillium.bukoliandroidsdk.models.DialogModel;
 import com.mobillium.bukoliandroidsdk.models.DialogPointModel;
+import com.mobillium.bukoliandroidsdk.models.ResponseInfo;
 import com.mobillium.bukoliandroidsdk.models.ResponsePoints;
 import com.mobillium.bukoliandroidsdk.ui.BaseActivity;
 import com.mobillium.bukoliandroidsdk.ui.FragmentSearchList;
@@ -146,8 +147,8 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
     AdapterPoints adapterNoktalarimItems;
 
     View marker, centerMarker;
-    TextView markerText;
-    ImageView markerImage, centerImage, ivCenter,ivInfoButton;
+    TextView markerText, tvInfo;
+    ImageView markerImage, centerImage, ivCenter, ivInfoButton;
     RelativeLayout rlCenterContainer;
     Handler mapHandler;
     boolean canMakeReq = false;
@@ -206,6 +207,7 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
             getCurrentLocation();
 
             mapHandler = new Handler();
+            makeInfoRequest();
 
         } else {
             BukoliLogger.writeInfoLog(getString(R.string.sdk_not_connected));
@@ -239,6 +241,7 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
         super.createViews();
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab2 = (FloatingActionButton) findViewById(R.id.fab2);
+        tvInfo = (TextView) findViewById(R.id.tvInfo);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         rlSearchView = (LinearLayout) findViewById(R.id.rlSearchView);
         ivInfoButton = (ImageView) findViewById(R.id.ivInfoButton);
@@ -383,7 +386,7 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
         ivInfoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Bukoli.getInstance().showInfoDialog(ActivitySelectPoint.this,null);
+                Bukoli.getInstance().showInfoDialog(ActivitySelectPoint.this, null);
             }
         });
 
@@ -499,7 +502,7 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
 
                             BukoliPoint current = responsePoints.getData().get(i);
                             current.setIndex("" + (bukoliPoints.size() + 1));
-                            DialogPointModel dialogPointModel = new DialogPointModel(current.getName(), "", "", "", R.drawable.icon_map, current.getAddress(), current.getFakeHours(), current.getLarge_image_url(), current.getName());
+                            DialogPointModel dialogPointModel = new DialogPointModel(current.getName(), "", "", "", R.drawable.icon_map, current.getAddress(), current.getFakeHours(), current.getLarge_image_url(), current.getName(), current.getDistance());
                             current.setModel(dialogPointModel);
                             adapterNoktalarimItems.addItem(current, bukoliPoints.size());
                             MarkerOptions tempMarker;
@@ -741,6 +744,23 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
         return false;
     }
 
+
+    private void makeInfoRequest() {
+        Map<String, String> params = new HashMap<>();
+        ServiceOperations.serviceReq(getApplicationContext(), Request.Method.GET, "information", params, new ServiceCallback() {
+            @Override
+            public void done(String result, ServiceException e) {
+                if (e == null) {
+                    ResponseInfo responseInfo = Bukoli.getInstance().getGson().fromJson(result, ResponseInfo.class);
+                    tvInfo.setText(responseInfo.getInformation());
+                }else{
+                    //
+                }
+            }
+        });
+
+
+    }
 
     private void makePointsRequest() {
         Map<String, String> params = new HashMap<>();

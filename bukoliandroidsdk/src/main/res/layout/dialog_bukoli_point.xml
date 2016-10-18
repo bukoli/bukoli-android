@@ -51,14 +51,37 @@
             android:paddingRight="10dp">
 
 
-            <ImageView
-                android:id="@+id/ivPoint"
+            <FrameLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_weight="1"
-                android:adjustViewBounds="true"
-                android:scaleType="fitCenter" />
+                android:layout_weight="1">
+
+                <ImageView
+                    android:id="@+id/ivPoint"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitCenter" />
+
+
+                <TextView
+                    android:id="@+id/tvDistance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|right"
+                    android:background="@color/black_alpha"
+                    android:paddingTop="2dp"
+                    android:paddingBottom="2dp"
+                    android:paddingLeft="4dp"
+                    android:paddingRight="4dp"
+                    android:layout_margin="3dp"
+                    android:text="20 metre"
+                    android:textColor="@color/accentGrey"
+                    android:textSize="12sp"
+                    android:visibility="visible" />
+            </FrameLayout>
+
 
 
             <LinearLayout

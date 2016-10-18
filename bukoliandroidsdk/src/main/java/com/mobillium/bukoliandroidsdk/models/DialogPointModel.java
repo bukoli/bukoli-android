@@ -6,11 +6,13 @@ package com.mobillium.bukoliandroidsdk.models;
 public class DialogPointModel extends DialogModel {
     private String address;
     private String hours;
+    private String distance;
 
-    public DialogPointModel(String title, String desc, String btPositive, String btNegative, int iconResId, String address, String hours, String url, String name) {
+    public DialogPointModel(String title, String desc, String btPositive, String btNegative, int iconResId, String address, String hours, String url, String name,String distance) {
         super(title, desc, btPositive, btNegative, iconResId, hours, url, name);
         this.address = address;
         this.hours = hours;
+        this.distance = distance;
     }
 
     public String getAddress() {
@@ -29,4 +31,11 @@ public class DialogPointModel extends DialogModel {
         this.hours = hours;
     }
 
+    public String getDistance() {
+        return distance;
+    }
+
+    public void setDistance(String distance) {
+        this.distance = distance;
+    }
 }
