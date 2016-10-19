@@ -46,7 +46,10 @@
                     android:layout_marginLeft="5dp"
                     android:gravity="center_vertical|left"
                     android:text="Nisantasi Market"
+                    android:maxLines="1"
+                    android:ellipsize="end"
                     android:textColor="@color/accentGrey"
+                    android:layout_toLeftOf="@+id/ivIconItem"
                     android:textSize="18dp"
                     android:visibility="visible" />
 
