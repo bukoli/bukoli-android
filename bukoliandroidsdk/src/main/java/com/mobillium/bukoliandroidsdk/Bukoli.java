@@ -36,6 +36,8 @@ public class Bukoli {
     static final int TYPE_MAP = 1;
     static final int TYPE_LIST = 2;
 
+    static final String SHARED_PREF = "BUKOLI";
+
     static String url = "http://bukoli.mobillium.com/integration/";
     static Bukoli instance = null;
     static String bukoliapiKey;
@@ -334,6 +336,16 @@ public class Bukoli {
             return getGson().fromJson(loc, BukoliLocation.class);
         }
         return new BukoliLocation("0", "0");
+    }
+
+    public void saveSharedPref() {
+        SharedPreferences saveData = applicationContext.getSharedPreferences(SHARED_PREF, MODE_PRIVATE);
+        saveData.edit().putBoolean("swipe", true).commit();
+    }
+
+    public boolean getSharedPref() {
+        SharedPreferences saveData = applicationContext.getSharedPreferences(SHARED_PREF, MODE_PRIVATE);
+        return saveData.getBoolean("swipe", false);
     }
 }
 

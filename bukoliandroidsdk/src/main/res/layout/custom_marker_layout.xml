@@ -17,7 +17,7 @@
         android:layout_height="32dp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="3dp"
-        android:background="@drawable/timer_circle_stroke"
+        android:background="@drawable/circle_stroke"
         android:gravity="center"
         android:text="20"
         android:textColor="#FFF"

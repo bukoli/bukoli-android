@@ -70,6 +70,7 @@ import com.mobillium.bukoliandroidsdk.ui.BaseActivity;
 import com.mobillium.bukoliandroidsdk.ui.FragmentSearchList;
 import com.mobillium.bukoliandroidsdk.ui.adapter.AdapterPoints;
 import com.mobillium.bukoliandroidsdk.ui.customview.CVPointItem;
+import com.mobillium.bukoliandroidsdk.ui.customview.DialogPointFragment;
 import com.mobillium.bukoliandroidsdk.utils.BukoliLogger;
 import com.mobillium.bukoliandroidsdk.utils.DialogCallback;
 import com.mobillium.bukoliandroidsdk.utils.DialogHelper;
@@ -289,8 +290,8 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
 
     private void initializeToolbar() {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setPadding(0,0,0,0);//for tab otherwise give space in tab
-        toolbar.setContentInsetsAbsolute(0,0);
+        toolbar.setPadding(0, 0, 0, 0);//for tab otherwise give space in tab
+        toolbar.setContentInsetsAbsolute(0, 0);
         toolbar.setContentInsetStartWithNavigation(0);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -307,7 +308,7 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
         markerText.setText("1");
         markerImage.setColorFilter(Bukoli.getInstance().getButtonBackgroundColor(), PorterDuff.Mode.SRC_ATOP);
 
-        Drawable markerLayer = ContextCompat.getDrawable(this, R.drawable.timer_circle_stroke);
+        Drawable markerLayer = ContextCompat.getDrawable(this, R.drawable.circle_stroke);
         markerLayer.mutate().setColorFilter(Bukoli.getInstance().getButtonTextColor(), PorterDuff.Mode.SRC_ATOP);
         markerText.setBackground(markerLayer);
 
@@ -409,6 +410,15 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
             public void pressed(int whichButton, String takip, String siparis) {
 
             }
+            @Override
+            public void selected(int position) {
+
+            }
+
+            @Override
+            public void dismissed() {
+
+            }
         };
 
         callbackDialogLoc = new DialogCallback() {
@@ -431,6 +441,15 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
             public void pressed(int whichButton, String takip, String siparis) {
 
             }
+            @Override
+            public void selected(int position) {
+
+            }
+
+            @Override
+            public void dismissed() {
+
+            }
         };
 
         callbackAddDialog = new DialogCallback() {
@@ -438,43 +457,10 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
             public void pressed(int whichButton) {
                 switch (whichButton) {
                     case POSITIVE_BUTTON:
-                        if (Bukoli.getInstance().isShowPhoneDialog()) {
 
-                            Handler handler = new Handler();
-                            handler.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    DialogModel dialogModel = new DialogModel("", "", "", "", R.drawable.icon_map);
-                                    DialogHelper.showPhoneNumberDialog(ActivitySelectPoint.this, dialogModel, new DialogCallback() {
-                                        @Override
-                                        public void pressed(int whichButton) {
-
-                                        }
-
-                                        @Override
-                                        public void pressed(int whichButton, String takip, String siparis) {
-
-                                            if (TextUtils.isEmpty(takip)) {
-                                                refreshPins();
-                                            } else {
-                                                Bukoli.getInstance().getCallBack().onSuccess(currentlySelectedPoint, takip);
-                                                finish();
-                                            }
-                                        }
-                                    });
-                                }
-                            }, 500);
-
-
-                        } else {
-                            Bukoli.getInstance().getCallBack().onSuccess(currentlySelectedPoint, null);
-                            finish();
-
-                        }
                         break;
                     case NEGATIVE_BUTTON:
-                        refreshPins();
-                        currentlySelectedPoint = null;
+
                         break;
                 }
             }
@@ -482,6 +468,60 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
             @Override
             public void pressed(int whichButton, String takip, String siparis) {
 
+            }
+
+            @Override
+            public void selected(final int position) {
+                if (Bukoli.getInstance().isShowPhoneDialog()) {
+
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            DialogModel dialogModel = new DialogModel("", "", "", "", R.drawable.icon_map);
+                            DialogHelper.showPhoneNumberDialog(ActivitySelectPoint.this, dialogModel, new DialogCallback() {
+                                @Override
+                                public void pressed(int whichButton) {
+
+                                }
+
+                                @Override
+                                public void pressed(int whichButton, String takip, String siparis) {
+
+                                    if (TextUtils.isEmpty(takip)) {
+                                        refreshPins();
+                                    } else {
+                                        currentlySelectedPoint = bukoliPoints.get(position);
+                                        Bukoli.getInstance().getCallBack().onSuccess(currentlySelectedPoint, takip);
+                                        finish();
+                                    }
+                                }
+                                @Override
+                                public void selected(int position) {
+
+                                }
+
+                                @Override
+                                public void dismissed() {
+
+                                }
+                            });
+                        }
+                    }, 500);
+
+
+                } else {
+                    currentlySelectedPoint = bukoliPoints.get(position);
+                    Bukoli.getInstance().getCallBack().onSuccess(currentlySelectedPoint, null);
+                    finish();
+
+                }
+            }
+
+            @Override
+            public void dismissed() {
+                refreshPins();
+                currentlySelectedPoint = null;
             }
         };
 
@@ -635,7 +675,10 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
             currentlySelectedPoint = bukoliPoints.get(i);
             if (marker.getTitle().equals(currentlySelectedPoint.getName())) {
                 currentlySelectedPointIndex = i;
-                DialogHelper.showNoktalarimDialog(ActivitySelectPoint.this, currentlySelectedPoint.getModel(), callbackAddDialog, currentlySelectedPoint.getIndex(), currentlySelectedPoint.is_favorite());
+//                DialogHelper.showNoktalarimDialog(ActivitySelectPoint.this, currentlySelectedPoint.getModel(), callbackAddDialog, currentlySelectedPoint.getIndex(), currentlySelectedPoint.is_favorite());
+                DialogPointFragment fragment = DialogPointFragment.newInstance(currentlySelectedPoint, currentlySelectedPointIndex, bukoliPoints, callbackAddDialog);
+                fragment.show(getSupportFragmentManager(),"DIALOG");
+
                 return;
             }
         }
@@ -749,7 +792,7 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
                 if (e == null) {
                     ResponseInfo responseInfo = Bukoli.getInstance().getGson().fromJson(result, ResponseInfo.class);
                     tvInfo.setText(responseInfo.getInformation());
-                }else{
+                } else {
                     //
                 }
             }
@@ -1099,6 +1142,15 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
                                     Bukoli.getInstance().getCallBack().onSuccess(currentlySelectedPoint, takip);
                                     finish();
                                 }
+                            }
+                            @Override
+                            public void selected(int position) {
+
+                            }
+
+                            @Override
+                            public void dismissed() {
+
                             }
                         });
                     }
