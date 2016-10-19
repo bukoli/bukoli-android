@@ -2,9 +2,10 @@ package com.mobillium.bukoliandroidsdk.ui;
 
 
 import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.StateListDrawable;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.util.StateSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,9 +20,6 @@ import com.mobillium.bukoliandroidsdk.models.BukoliPoint;
 import com.mobillium.bukoliandroidsdk.utils.PointCallback;
 import com.mobillium.bukoliandroidsdk.utils.ShapeCreator;
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class FragmentPoint extends BaseFragment {
 
     private BukoliPoint bukoliPoint;
@@ -69,6 +67,10 @@ public class FragmentPoint extends BaseFragment {
         tvDistance.setBackground(ShapeCreator.createStrokeBg());
 
         tvDialogNumber.setText("" + (position + 1));
+        Drawable markerLayer = ContextCompat.getDrawable(getContext(), R.drawable.oval_bg);
+        markerLayer.mutate().setColorFilter(Bukoli.getInstance().getButtonBackgroundColor(), PorterDuff.Mode.SRC_ATOP);
+        tvDialogNumber.setBackground(markerLayer);
+        tvDialogNumber.setTextColor(Bukoli.getInstance().getButtonTextColor());
 
         Glide.with(getActivity()).load(bukoliPoint.getLarge_image_url()).crossFade().into(ivPoint);
 
