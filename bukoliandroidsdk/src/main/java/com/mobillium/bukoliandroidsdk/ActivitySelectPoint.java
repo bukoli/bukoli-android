@@ -86,6 +86,7 @@ import java.util.Map;
 
 import static com.mobillium.bukoliandroidsdk.Bukoli.TYPE_LIST;
 import static com.mobillium.bukoliandroidsdk.Bukoli.TYPE_MAP;
+import static com.mobillium.bukoliandroidsdk.R.id.map;
 
 
 public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks,
@@ -102,6 +103,8 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
     double targetLongitude = 41.043609;
     private LocationRequest mLocationRequest;
     ProgressDialog progressDialog;
+
+    float zoomLevel = 14;
 
     AppBarLayout appBarLayout;
     Toolbar toolbar;
@@ -255,7 +258,7 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
         appBarLayout = (AppBarLayout) findViewById(R.id.appBarLayout);
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
+                .findFragmentById(map);
         mapFragment.getMapAsync(this);
 
 
@@ -390,6 +393,7 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
             @Override
             public void onClick(View v) {
                 canAnimateMap = true;
+                canFocusMap = false;
                 getCurrentLocation();
             }
         });
@@ -676,9 +680,8 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
 
         // Add a marker in Istanbul and move the camera
 
-        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(currentLatitude, currentLongitude), 14);
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(currentLatitude, currentLongitude), zoomLevel);
         mMap.animateCamera(cameraUpdate);
-
 
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             public boolean onMarkerClick(Marker marker) {
@@ -789,7 +792,7 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
 
 
         if (canAnimateMap) {
-            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(currentLatitude, currentLongitude), 14);
+            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(currentLatitude, currentLongitude), zoomLevel);
             mMap.animateCamera(cameraUpdate);
             lastPosition = mMap.getCameraPosition();
             canAnimateMap = false;
@@ -1163,6 +1166,7 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
         public void onCameraIdle() {
             mapHandler.removeCallbacks(mapRunnable);
             mapHandler.postDelayed(mapRunnable, 750);
+            zoomLevel = mMap.getCameraPosition().zoom;
         }
     };
 
