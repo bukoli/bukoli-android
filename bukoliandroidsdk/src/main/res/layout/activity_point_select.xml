@@ -69,7 +69,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:background="@null"
-                                android:hint="Aramak için cadde, sokak, mahalle yazınız"
+                                android:hint="İlçe, mahalle, sokak ara"
                                 android:imeOptions="actionSearch"
                                 android:inputType="text"
                                 android:maxLines="1"
@@ -120,6 +120,7 @@
                 android:layout_above="@+id/rlAdContainer"
                 android:background="@color/white"
                 android:clipToPadding="false"
+                android:paddingTop="10dp"
                 android:visibility="gone"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
@@ -136,7 +137,8 @@
                 <ImageView
                     android:id="@+id/ivCenter"
                     android:layout_width="65dp"
-                    android:layout_height="65dp"
+                    android:layout_height="110dp"
+                    android:paddingBottom="45dp"
                     android:layout_centerInParent="true"
                     android:adjustViewBounds="true"
                     android:src="@drawable/icon_center" />
@@ -168,7 +170,7 @@
                     android:layout_centerVertical="true"
                     android:gravity="center_vertical|left"
                     android:padding="10dp"
-                    android:text="Ad Text"
+                    android:text="Bukoli"
                     android:textColor="@color/white"
                     android:textSize="18sp"
                     android:visibility="visible" />

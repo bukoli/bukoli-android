@@ -2,6 +2,8 @@
 package com.mobillium.bukoliandroidsdk.utils;
 
 
+import com.mobillium.bukoliandroidsdk.models.BukoliPoint;
+
 public interface DialogCallback {
 
     public void pressed(int whichButton);
@@ -11,4 +13,6 @@ public interface DialogCallback {
     public void selected(int position);
 
     public void dismissed();
+
+    public void swiped(BukoliPoint bukoliPoint);
 }

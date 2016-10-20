@@ -31,7 +31,6 @@ import java.util.ArrayList;
 public class DialogPointFragment extends DialogFragment implements DialogInterface.OnCancelListener {
 
     DialogCallback callback;
-    PointCallback pointCallback;
     BukoliPoint selectedPoint;
     ImageView ivSwipeItem;
     ArrayList<BukoliPoint> bukoliPoints = new ArrayList<>();
@@ -73,7 +72,7 @@ public class DialogPointFragment extends DialogFragment implements DialogInterfa
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setStyle(STYLE_NO_FRAME, android.R.style.Theme_Holo_Light);
+        setStyle(STYLE_NO_FRAME, R.style.PointDialog);
     }
 
     @Override
@@ -111,6 +110,8 @@ public class DialogPointFragment extends DialogFragment implements DialogInterfa
                         Bukoli.getInstance().saveSharedPref();
                     }
                 }
+
+                callback.swiped(bukoliPoints.get(pos));
             }
 
             @Override

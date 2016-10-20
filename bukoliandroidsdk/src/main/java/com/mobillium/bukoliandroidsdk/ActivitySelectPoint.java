@@ -10,6 +10,7 @@ import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -125,7 +126,7 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
     private ProgressBar progressBar;
     private LinearLayout rlSearchView;
     private ImageView search_icon, search_icon_left;
-    private boolean canPinLocation = true;
+    private boolean canAnimateMap = true;
     private boolean canFocusMap = true;
 
     CameraPosition lastPosition;
@@ -133,6 +134,7 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
     FloatingActionButton fab, fab2;
 
     boolean canmakeSearch = true;
+//    boolean isUserInteraction = true;
 
     BukoliPoint currentlySelectedPoint = null;
     int currentlySelectedPointIndex;
@@ -146,9 +148,10 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
     RecyclerView recyclerView;
     AdapterPoints adapterNoktalarimItems;
 
-    View marker, centerMarker;
+    View marker, locker, centerMarker;
     TextView markerText, tvInfo;
-    ImageView markerImage, centerImage, ivCenter, ivInfoButton;
+    TextView lockerText;
+    ImageView markerImage, lockerImage, centerImage, ivCenter, ivInfoButton;
     RelativeLayout rlCenterContainer;
     Handler mapHandler;
     boolean canMakeReq = false;
@@ -302,6 +305,7 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
     }
 
     private void initilizeMarkers() {
+        //Marker Color
         marker = ((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.custom_marker_layout, null);
         markerText = (TextView) marker.findViewById(R.id.tvNumber);
         markerImage = (ImageView) marker.findViewById(R.id.markerImage);
@@ -314,6 +318,20 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
 
         markerText.setTextColor(Bukoli.getInstance().getButtonTextColor());
 
+        //Locker color
+        locker = ((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.custom_marker_layout, null);
+        lockerText = (TextView) locker.findViewById(R.id.tvNumber);
+        lockerImage = (ImageView) locker.findViewById(R.id.markerImage);
+        lockerText.setText("1");
+        lockerImage.setColorFilter(Bukoli.getInstance().getLockerColor(), PorterDuff.Mode.SRC_ATOP);
+
+        Drawable lockerLayer = ContextCompat.getDrawable(this, R.drawable.circle_stroke);
+        lockerLayer.mutate().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
+        lockerText.setBackground(lockerLayer);
+
+        lockerText.setTextColor(Color.WHITE);
+
+        //Center color
         centerMarker = ((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.custom_center_layout, null);
         centerImage = (ImageView) centerMarker.findViewById(R.id.centerImage);
         centerImage.setColorFilter(Bukoli.getInstance().getDarkThemeColor(), PorterDuff.Mode.SRC_ATOP);
@@ -357,10 +375,12 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
             public void onClick(View v) {
                 if (recyclerView.getVisibility() == View.VISIBLE) {
                     recyclerView.setVisibility(View.GONE);
+                    fab2.show();
                     rlCenterContainer.setVisibility(View.VISIBLE);
                     setFabIcon(TYPE_MAP);
                 } else {
                     recyclerView.setVisibility(View.VISIBLE);
+                    fab2.hide();
                     rlCenterContainer.setVisibility(View.GONE);
                     setFabIcon(TYPE_LIST);
                 }
@@ -369,7 +389,7 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
         fab2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                canPinLocation = true;
+                canAnimateMap = true;
                 getCurrentLocation();
             }
         });
@@ -410,6 +430,7 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
             public void pressed(int whichButton, String takip, String siparis) {
 
             }
+
             @Override
             public void selected(int position) {
 
@@ -417,6 +438,11 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
 
             @Override
             public void dismissed() {
+
+            }
+
+            @Override
+            public void swiped(BukoliPoint bukoliPoint) {
 
             }
         };
@@ -431,7 +457,7 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
                         startActivityForResult(callGPSSettingIntent, 1);
                         break;
                     case NEGATIVE_BUTTON:
-                        canPinLocation = false;
+                        canAnimateMap = false;
                         handleNewLocation(null, true);
                         break;
                 }
@@ -441,6 +467,7 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
             public void pressed(int whichButton, String takip, String siparis) {
 
             }
+
             @Override
             public void selected(int position) {
 
@@ -450,11 +477,17 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
             public void dismissed() {
 
             }
+
+            @Override
+            public void swiped(BukoliPoint bukoliPoint) {
+
+            }
         };
 
         callbackAddDialog = new DialogCallback() {
             @Override
             public void pressed(int whichButton) {
+                canMakeReq = true;
                 switch (whichButton) {
                     case POSITIVE_BUTTON:
 
@@ -472,6 +505,7 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
 
             @Override
             public void selected(final int position) {
+                canMakeReq = true;
                 if (Bukoli.getInstance().isShowPhoneDialog()) {
 
                     Handler handler = new Handler();
@@ -496,6 +530,7 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
                                         finish();
                                     }
                                 }
+
                                 @Override
                                 public void selected(int position) {
 
@@ -504,6 +539,11 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
                                 @Override
                                 public void dismissed() {
 
+                                }
+
+                                @Override
+                                public void swiped(BukoliPoint bukoliPoint) {
+                                    moveCameraToPoint(bukoliPoint);
                                 }
                             });
                         }
@@ -520,8 +560,14 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
 
             @Override
             public void dismissed() {
+                canMakeReq = true;
                 refreshPins();
                 currentlySelectedPoint = null;
+            }
+
+            @Override
+            public void swiped(BukoliPoint bukoliPoint) {
+                moveCameraToPoint(bukoliPoint);
             }
         };
 
@@ -549,7 +595,7 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
                             adapterNoktalarimItems.addItem(current, bukoliPoints.size());
                             MarkerOptions tempMarker;
                             if (current.is_locker()) {
-                                tempMarker = new MarkerOptions().position(new LatLng(Double.parseDouble(current.getLocationBukoli().getLatitude()), Double.parseDouble(current.getLocationBukoli().getLongitude()))).title(current.getName()).icon(BitmapDescriptorFactory.fromBitmap(createDrawableFromView(current.getIndex())));
+                                tempMarker = new MarkerOptions().position(new LatLng(Double.parseDouble(current.getLocationBukoli().getLatitude()), Double.parseDouble(current.getLocationBukoli().getLongitude()))).title(current.getName()).icon(BitmapDescriptorFactory.fromBitmap(createDrawableLockerFromView(current.getIndex())));
                             } else {
                                 tempMarker = new MarkerOptions().position(new LatLng(Double.parseDouble(current.getLocationBukoli().getLatitude()), Double.parseDouble(current.getLocationBukoli().getLongitude()))).title(current.getName()).icon(BitmapDescriptorFactory.fromBitmap(createDrawableFromView(current.getIndex())));
                             }
@@ -655,6 +701,7 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
                 findPoint(marker);
                 // Re-assign the last opened such that we can close it later
                 lastOpenned = marker;
+                lastOpenned.hideInfoWindow();
                 // Event was handled by our code do not launch default behaviour.
                 return true;
             }
@@ -677,7 +724,8 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
                 currentlySelectedPointIndex = i;
 //                DialogHelper.showNoktalarimDialog(ActivitySelectPoint.this, currentlySelectedPoint.getModel(), callbackAddDialog, currentlySelectedPoint.getIndex(), currentlySelectedPoint.is_favorite());
                 DialogPointFragment fragment = DialogPointFragment.newInstance(currentlySelectedPoint, currentlySelectedPointIndex, bukoliPoints, callbackAddDialog);
-                fragment.show(getSupportFragmentManager(),"DIALOG");
+                fragment.show(getSupportFragmentManager(), "DIALOG");
+                moveCameraToPoint(currentlySelectedPoint);
 
                 return;
             }
@@ -740,11 +788,11 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
         }
 
 
-        if (canPinLocation) {
+        if (canAnimateMap) {
             CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(currentLatitude, currentLongitude), 14);
             mMap.animateCamera(cameraUpdate);
             lastPosition = mMap.getCameraPosition();
-            canPinLocation = false;
+            canAnimateMap = false;
 
         }
 
@@ -757,6 +805,16 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
         }
 
 
+    }
+
+    private void moveCameraToPoint(BukoliPoint bukoliPoint) {
+        canMakeReq = false;
+        currentLatitude = Double.parseDouble(bukoliPoint.getLocationBukoli().getLatitude());
+        currentLongitude = Double.parseDouble(bukoliPoint.getLocationBukoli().getLongitude());
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(currentLatitude, currentLongitude), mMap.getCameraPosition().zoom);
+        mMap.moveCamera(cameraUpdate);
+        lastPosition = mMap.getCameraPosition();
+        canAnimateMap = false;
     }
 
     @Override
@@ -809,7 +867,6 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
         ServiceOperations.serviceReq(getApplicationContext(), Request.Method.GET, "point", params, callbackPoints);
 
         showProgress(getString(R.string.sdk_points_loading));
-
 
     }
 
@@ -957,6 +1014,25 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
         return bitmap;
     }
 
+    // Convert a view to bitmap
+    private Bitmap createDrawableLockerFromView(String num) {
+
+        lockerText.setText(num);
+
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        locker.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT));
+        locker.measure(displayMetrics.widthPixels, displayMetrics.heightPixels);
+        locker.layout(0, 0, displayMetrics.widthPixels, displayMetrics.heightPixels);
+        locker.buildDrawingCache();
+        Bitmap bitmap = Bitmap.createBitmap(locker.getMeasuredWidth(), locker.getMeasuredHeight(), Bitmap.Config.ARGB_8888);
+
+        Canvas canvas = new Canvas(bitmap);
+        locker.draw(canvas);
+
+        return bitmap;
+    }
+
     private final TextWatcher mTextEditorWatcher = new TextWatcher() {
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
         }
@@ -1066,7 +1142,7 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
             BukoliPoint current = bukoliPoints.get(i);
             MarkerOptions tempMarker;
             if (current.is_locker()) {
-                tempMarker = new MarkerOptions().position(new LatLng(Double.parseDouble(current.getLocationBukoli().getLatitude()), Double.parseDouble(current.getLocationBukoli().getLongitude()))).title(current.getName()).icon(BitmapDescriptorFactory.fromBitmap(createDrawableFromView(current.getIndex())));
+                tempMarker = new MarkerOptions().position(new LatLng(Double.parseDouble(current.getLocationBukoli().getLatitude()), Double.parseDouble(current.getLocationBukoli().getLongitude()))).title(current.getName()).icon(BitmapDescriptorFactory.fromBitmap(createDrawableLockerFromView(current.getIndex())));
             } else {
                 tempMarker = new MarkerOptions().position(new LatLng(Double.parseDouble(current.getLocationBukoli().getLatitude()), Double.parseDouble(current.getLocationBukoli().getLongitude()))).title(current.getName()).icon(BitmapDescriptorFactory.fromBitmap(createDrawableFromView(current.getIndex())));
 
@@ -1076,7 +1152,7 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
         }
 
 
-        canPinLocation = false;
+        canAnimateMap = false;
 
         adapterNoktalarimItems.notifyDataSetChanged();
 
@@ -1143,6 +1219,7 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
                                     finish();
                                 }
                             }
+
                             @Override
                             public void selected(int position) {
 
@@ -1150,6 +1227,11 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
 
                             @Override
                             public void dismissed() {
+
+                            }
+
+                            @Override
+                            public void swiped(BukoliPoint bukoliPoint) {
 
                             }
                         });

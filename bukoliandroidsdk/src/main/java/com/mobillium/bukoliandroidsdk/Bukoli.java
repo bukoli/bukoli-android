@@ -55,6 +55,7 @@ public class Bukoli {
     int buttonTextColor = 0xFFFFFFFF; //Default White
     int buttonBackgroundColor = 0xFFF8BA1B; //Default Bukoli Yellow
     int darkThemeColor = 0xFF3E3E3E; //Default Bukoli Grey
+    int lockerColor = 0xFF31AADE; //Default Bukoli Locker Blue
     boolean showPhoneDialog = false; //Default false
     boolean isDebugEnabled = false; //Default false
 
@@ -239,6 +240,10 @@ public class Bukoli {
     public Bukoli setButtonBackgroundColor(int buttonBackgroundColor) {
         this.buttonBackgroundColor = buttonBackgroundColor;
         return getInstance();
+    }
+
+    public int getLockerColor() {
+        return lockerColor;
     }
 
     public int getDarkThemeColor() {
