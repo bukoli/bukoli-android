@@ -14,6 +14,7 @@ public class BukoliPoint {
     private String district;
     private String county;
     private String city;
+    private int state;
     private String distance;
     private BukoliLocation location;
     private String index;
@@ -227,4 +228,20 @@ public class BukoliPoint {
     public void setSmall_image_url(String small_image_url) {
         this.small_image_url = small_image_url;
     }
+
+    public int getState() {
+        return state;
+    }
+
+    public void setState(int state) {
+        this.state = state;
+    }
+
+    public boolean isActive() {
+        if (getState() == 0) {
+            return false;
+        }
+        return true;
+    }
+
 }

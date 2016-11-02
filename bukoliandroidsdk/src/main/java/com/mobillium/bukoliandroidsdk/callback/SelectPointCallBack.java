@@ -10,4 +10,5 @@ public interface SelectPointCallBack {
     public void onSuccess(BukoliPoint bukoliPoint, String phoneNumber);
     public void onCancel();
     public void onError(BukoliPoint bukoliPoint);
+    public void onAuthError();
 }

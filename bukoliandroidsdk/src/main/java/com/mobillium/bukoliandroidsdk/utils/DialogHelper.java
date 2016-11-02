@@ -12,7 +12,10 @@ import android.util.StateSet;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,9 +23,12 @@ import com.bumptech.glide.Glide;
 import com.mobillium.bukoliandroidsdk.Bukoli;
 import com.mobillium.bukoliandroidsdk.R;
 import com.mobillium.bukoliandroidsdk.callback.InfoCallback;
+import com.mobillium.bukoliandroidsdk.models.BukoliPoint;
 import com.mobillium.bukoliandroidsdk.models.DialogModel;
 import com.mobillium.bukoliandroidsdk.models.DialogPointModel;
 import com.mobillium.bukoliandroidsdk.ui.customview.BukoliEditText;
+import com.mobillium.bukoliandroidsdk.webservice.ServiceCallback;
+import com.mobillium.bukoliandroidsdk.webservice.ServiceException;
 
 
 /**
@@ -221,7 +227,7 @@ public class DialogHelper {
     }
 
     //
-    public static void showPhoneNumberDialog(final Context context, DialogModel model, final DialogCallback callback) {
+    public static void showPhoneNumberDialog(final Context context, final DialogCallback callback) {
 
         dismissCurrentDialog();
         //Initialise Dialog
@@ -281,6 +287,111 @@ public class DialogHelper {
             @Override
             public void onCancel(DialogInterface dialogInterface) {
                 callback.pressed(NEGATIVE_BUTTON, "", "");
+            }
+        });
+        //Show Dialog
+        dialog.show();
+
+    }
+
+
+    public static void showActivityCheckDialog(final Context context, final DialogActiveCallback callback) {
+
+        dismissCurrentDialog();
+        //Initialise Dialog
+        dialog = new Dialog(context);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_point_active);
+        dialog.setCanceledOnTouchOutside(false);
+
+        //Grab the window of the dialog, and change the width
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+        Window window = dialog.getWindow();
+        lp.copyFrom(window.getAttributes());
+        //This makes the dialog take up the full width
+        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        window.setAttributes(lp);
+
+        //Create Views
+        TextView btSend = (TextView) dialog.findViewById(R.id.btSend);
+        TextView btRepeat = (TextView) dialog.findViewById(R.id.btRepeat);
+        TextView btClose = (TextView) dialog.findViewById(R.id.btClose);
+        TextView tvDialogTitle = (TextView) dialog.findViewById(R.id.tvDialogTitle);
+        TextView tvDialogDesc = (TextView) dialog.findViewById(R.id.tvDialogDesc);
+        final TextView tvDialogResult = (TextView) dialog.findViewById(R.id.tvDialogResult);
+        final EditText etDialogTakip = (EditText) dialog.findViewById(R.id.etDialogTakip);
+        ImageView ivIconItem = (ImageView) dialog.findViewById(R.id.ivIconItem);
+        final RelativeLayout resultLayout = (RelativeLayout) dialog.findViewById(R.id.resultLayout);
+        final FrameLayout progressLayout = (FrameLayout) dialog.findViewById(R.id.progressLayout);
+
+        //Selector
+        StateListDrawable stateListDrawable = new StateListDrawable();
+        stateListDrawable.addState(new int[]{android.R.attr.state_pressed}, ShapeCreator.getInstance().createStrokeButtonPressed());
+        stateListDrawable.addState(StateSet.WILD_CARD, ShapeCreator.getInstance().createStrokeButton());
+
+        btSend.setBackground(stateListDrawable);
+        btSend.setTextColor(Bukoli.getInstance().getButtonTextColor());
+
+        //Set ClickListeners
+        btSend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!TextUtils.isEmpty(etDialogTakip.getText().toString()) && etDialogTakip.getText().toString().length() == 8) {
+                    progressLayout.setVisibility(View.VISIBLE);
+                    callback.pressed(POSITIVE_BUTTON, etDialogTakip.getText().toString(), new ServiceCallback() {
+                        @Override
+                        public void done(String result, ServiceException e) {
+                            progressLayout.setVisibility(View.GONE);
+                            if (e == null) {
+                                resultLayout.setVisibility(View.VISIBLE);
+                                BukoliPoint selectedPoint = Bukoli.getInstance().getGson().fromJson(result, BukoliPoint.class);
+                                Bukoli.getInstance().getCheckPointCallback().isActive(selectedPoint.isActive());
+                                if(selectedPoint.isActive()){
+                                    tvDialogResult.setText(selectedPoint.getName() +" adlı Bukoli noktası aktiftir.");
+                                }else{
+                                    tvDialogResult.setText(selectedPoint.getName() +" adlı Bukoli noktası aktif değildir.");
+                                }
+                            } else {
+                                Bukoli.getInstance().getCheckPointCallback().onError();
+                            }
+                        }
+                    });
+
+                } else {
+                    Toast.makeText(context, context.getString(R.string.sdk_code_missing_error), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        btRepeat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                resultLayout.setVisibility(View.GONE);
+            }
+        });
+
+        btClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                callback.pressed(NEGATIVE_BUTTON, "",null);
+                dialog.dismiss();
+            }
+        });
+
+        ivIconItem.setColorFilter(Bukoli.getInstance().getDarkThemeColor(), PorterDuff.Mode.SRC_ATOP);
+        ivIconItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                callback.pressed(NEGATIVE_BUTTON, "",null);
+                dialog.dismiss();
+            }
+        });
+
+        dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialogInterface) {
+                callback.pressed(NEGATIVE_BUTTON, "",null);
             }
         });
         //Show Dialog

@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:mobilliumfont="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white">
+
+
+    <TextView
+        android:id="@+id/tvDialogDesc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:padding="20dp"
+        android:text="Aktiflik durumunu öğrenmek istediğiniz Bukoli noktasının kodunu girip Kontrol Et butonuna dokununuz."
+        android:textColor="@color/accentGrey"
+        android:textSize="14sp"
+        android:visibility="visible" />
+
+
+    <EditText
+        android:id="@+id/etDialogTakip"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvDialogDesc"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/edittext_light_bg"
+        android:gravity="center_vertical"
+        android:hint="TDR-12345"
+        android:imeOptions="actionNext"
+        android:inputType="textCapCharacters"
+        android:maxLength="9"
+        android:maxLines="1"
+        android:padding="10dp"
+        android:textColorHint="@color/colorGreyTabTextColor"
+        android:textSize="14sp" />
+
+
+    <TextView
+        android:id="@+id/btSend"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_below="@+id/etDialogTakip"
+        android:layout_margin="10dp"
+        android:background="@color/bukoliYellow"
+        android:gravity="center"
+        android:text="Kontrol Et"
+        android:textColor="@color/white" />
+
+    <View
+        android:id="@+id/bottomLine"
+        android:layout_width="match_parent"
+        android:layout_height="0px"
+        android:layout_below="@+id/btSend"></View>
+
+    <FrameLayout
+        android:id="@+id/progressLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/bottomLine"
+        android:clickable="true"
+        android:layout_alignTop="@+id/ivIconItem"
+        android:background="@color/black_alpha"
+        android:visibility="gone">
+
+        <ProgressBar
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+    </FrameLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/resultLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/bottomLine"
+        android:layout_alignTop="@+id/ivIconItem"
+        android:background="@color/white"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/tvDialogResult"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/llBottom"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:padding="20dp"
+            android:text="Aktiflik durumunu öğrenmek istediğiniz Bukoli noktasının kodunu girip Kontrol Et butonuna dokununuz."
+            android:textColor="@color/accentGrey"
+            android:textSize="14sp" />
+
+        <LinearLayout
+            android:id="@+id/llBottom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:padding="10dp">
+
+            <TextView
+                android:id="@+id/btRepeat"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:background="@color/bukoliGreyDark"
+                android:gravity="center"
+                android:text="Tekrar Ara"
+                android:textColor="@color/white" />
+
+            <android.support.v4.widget.Space
+                android:layout_width="10dp"
+                android:layout_height="0dp" />
+
+            <TextView
+                android:id="@+id/btClose"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:background="@color/bukoliYellow"
+                android:gravity="center"
+                android:text="Tamam"
+                android:textColor="@color/white" />
+        </LinearLayout>
+
+    </RelativeLayout>
+
+
+    <ImageView
+        android:id="@+id/ivIconItem"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentRight="true"
+        android:padding="10dp"
+        android:src="@drawable/icon_close"
+        android:visibility="visible" />
+</RelativeLayout>

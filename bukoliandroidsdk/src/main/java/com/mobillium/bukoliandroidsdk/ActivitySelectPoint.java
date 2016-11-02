@@ -60,6 +60,7 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.reflect.TypeToken;
+import com.mobillium.bukoliandroidsdk.callback.AuthorizeCallback;
 import com.mobillium.bukoliandroidsdk.models.AutoCompleteItem;
 import com.mobillium.bukoliandroidsdk.models.BukoliLocation;
 import com.mobillium.bukoliandroidsdk.models.BukoliPoint;
@@ -196,28 +197,58 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
 
         if (isOnline()) {
             BukoliLogger.writeInfoLog(getString(R.string.sdk_connected));
-            canMakeReq = true;
-            mGoogleApiClient = new GoogleApiClient.Builder(this)
-                    .addConnectionCallbacks(this)
-                    .addOnConnectionFailedListener(this)
-                    .addApi(LocationServices.API)
-                    .build();
+            showProgress("Kullanıcı bilgisi doğrulanıyor...");
+            Bukoli.getInstance().getTokenRequest(new AuthorizeCallback() {
+                @Override
+                public void onSuccess() {
+                    closeDialog();
+                    startMakingRequests();
+                }
 
-            // Create the LocationRequest object
-            mLocationRequest = LocationRequest.create()
-                    .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-                    .setInterval(10 * 1000)        // 10 seconds, in milliseconds
-                    .setFastestInterval(1 * 1000); // 1 second, in milliseconds
+                @Override
+                public void onFailure() {
+                    closeDialog();
+                    Bukoli.getInstance().getCallBack().onAuthError();
+                    finish();
+                }
+            });
 
-            getCurrentLocation();
-
-            mapHandler = new Handler();
-            makeInfoRequest();
 
         } else {
             BukoliLogger.writeInfoLog(getString(R.string.sdk_not_connected));
         }
 
+
+    }
+
+    void closeDialog() {
+        try {
+            if (progressDialog != null && progressDialog.isShowing()) {
+                progressDialog.dismiss();
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    void startMakingRequests() {
+        canMakeReq = true;
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
+
+        // Create the LocationRequest object
+        mLocationRequest = LocationRequest.create()
+                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+                .setInterval(10 * 1000)        // 10 seconds, in milliseconds
+                .setFastestInterval(1 * 1000); // 1 second, in milliseconds
+
+        getCurrentLocation();
+
+        mapHandler = new Handler();
+        makeInfoRequest();
 
     }
 
@@ -291,6 +322,23 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
         fab2.setBackgroundTintList(ColorStateList.valueOf(Bukoli.getInstance().getButtonTextColor()));
 
         ivCenter.setColorFilter(Bukoli.getInstance().getDarkThemeColor(), PorterDuff.Mode.SRC_ATOP);
+
+
+//        final ImageView ivGif = (ImageView) findViewById(R.id.ivGif);
+
+//        Glide.with(this)
+//                .load(R.drawable.box)
+//                .asGif()
+//                .crossFade()
+//                .into(ivGif);
+//
+//        Handler handler = new Handler();
+//        handler.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                ivGif.setVisibility(View.GONE);
+//            }
+//        }, 5000);
 
     }
 
@@ -516,8 +564,8 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            DialogModel dialogModel = new DialogModel("", "", "", "", R.drawable.icon_map);
-                            DialogHelper.showPhoneNumberDialog(ActivitySelectPoint.this, dialogModel, new DialogCallback() {
+
+                            DialogHelper.showPhoneNumberDialog(ActivitySelectPoint.this, new DialogCallback() {
                                 @Override
                                 public void pressed(int whichButton) {
 
@@ -581,9 +629,7 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
             public void done(String result, ServiceException e) {
 
                 canMakeReq = true;
-                if (progressDialog != null && progressDialog.isShowing()) {
-                    progressDialog.dismiss();
-                }
+                closeDialog();
 
                 try {
                     if (e == null) {
@@ -777,13 +823,7 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
     }
 
     private void handleNewLocation(Location location, boolean isFake) {
-        try {
-            if (progressDialog != null && progressDialog.isShowing()) {
-                progressDialog.dismiss();
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
+        closeDialog();
 
         if (!isFake) {
             currentLatitude = location.getLatitude();
@@ -1206,8 +1246,7 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        DialogModel dialogModel = new DialogModel("", "", "", "", R.drawable.icon_map);
-                        DialogHelper.showPhoneNumberDialog(ActivitySelectPoint.this, dialogModel, new DialogCallback() {
+                        DialogHelper.showPhoneNumberDialog(ActivitySelectPoint.this,  new DialogCallback() {
                             @Override
                             public void pressed(int whichButton) {
 

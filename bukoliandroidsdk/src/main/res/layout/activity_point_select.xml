@@ -211,6 +211,14 @@
                 app:layout_anchor="@id/fab"
                 app:layout_anchorGravity="top" />
 
+
+            <ImageView
+                android:id="@+id/ivGif"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:visibility="gone"
+                android:layout_centerInParent="true"/>
+
         </RelativeLayout>
 
 

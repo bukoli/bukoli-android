@@ -129,6 +129,7 @@ public class ServiceOperations {
                                 //Bakim yapiliyor
                             } else if (error.networkResponse.statusCode == 403) {
                                 //gecersiz token
+                                Bukoli.getInstance().getCallBack().onAuthError();
                             } else {
                                 Toast.makeText(mContext,
                                         serviceException.getMessage(),
@@ -163,7 +164,9 @@ public class ServiceOperations {
                     Map<String, String> params = new HashMap<String, String>();
                     params.put("X-Android-Key", Bukoli.getInstance().getApiKey());
                     params.put("X-Android-Package", Bukoli.getInstance().getPackageName());
-
+                    if (!TextUtils.isEmpty(Bukoli.getInstance().getApiToken())) {
+                        params.put("X-Integration-Token", Bukoli.getInstance().getApiToken());
+                    }
                     return params;
                 }
 

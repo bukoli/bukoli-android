@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.mobillium.bukoliandroidsdk.Bukoli;
+import com.mobillium.bukoliandroidsdk.callback.CheckPointCallback;
 import com.mobillium.bukoliandroidsdk.callback.InfoCallback;
 import com.mobillium.bukoliandroidsdk.callback.SelectPointCallBack;
 import com.mobillium.bukoliandroidsdk.models.BukoliPoint;
@@ -28,6 +29,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         //Initialize Bukoli SDK with Application context and API Key
         Bukoli.sdkInitialize(getApplicationContext(), "e6fa17c9-6168-4124-87c7-4b2310d1b4f9");
+        Bukoli.getInstance().setUser("1234", "", "");
 
         //Set Debug mode enabled or disabled
         Bukoli.getInstance().setDebugEnabled(true); // or false
@@ -69,6 +71,37 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             }
         });
+
+
+    }
+
+    private void openCheckDialog() {
+        Bukoli.getInstance().showIsActiveDialog(this, new CheckPointCallback() {
+            @Override
+            public void isActive(boolean active) {
+                if (active) {
+                    Toast.makeText(MainActivity.this, "Point is Active", Toast.LENGTH_SHORT).show();
+
+                } else {
+                    Toast.makeText(MainActivity.this, "Point is deActive", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onDismiss() {
+
+            }
+
+            @Override
+            public void onDisplay() {
+
+            }
+
+            @Override
+            public void onError() {
+
+            }
+        });
     }
 
     //Start Point Selection From Activity
@@ -94,6 +127,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onError(BukoliPoint bukoliPoint) {
                 Toast.makeText(MainActivity.this, "Phone Number Not Set", Toast.LENGTH_SHORT).show();
             }
+
+            @Override
+            public void onAuthError() {
+                Toast.makeText(MainActivity.this, "Authorization Error Occured", Toast.LENGTH_SHORT).show();
+            }
         });
     }
 
@@ -108,6 +146,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.btBukoliInfo:
                 setBukoliStyle();
                 openInfoDialog();
+                break;
+            case R.id.btBukoliCheck:
+                setBukoliStyle();
+                openCheckDialog();
                 break;
             case R.id.btExample1Point:
                 setExample1Style();

@@ -4,20 +4,34 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.TypedValue;
 
+import com.android.volley.Request;
 import com.google.gson.Gson;
+import com.mobillium.bukoliandroidsdk.callback.AuthorizeCallback;
+import com.mobillium.bukoliandroidsdk.callback.CheckPointCallback;
 import com.mobillium.bukoliandroidsdk.callback.InfoCallback;
 import com.mobillium.bukoliandroidsdk.callback.SelectPointCallBack;
 import com.mobillium.bukoliandroidsdk.models.BukoliLocation;
 import com.mobillium.bukoliandroidsdk.models.DialogModel;
+import com.mobillium.bukoliandroidsdk.models.ResponseAuthorize;
+import com.mobillium.bukoliandroidsdk.utils.BukoliException;
 import com.mobillium.bukoliandroidsdk.utils.BukoliSdkNotInitializedException;
+import com.mobillium.bukoliandroidsdk.utils.DialogActiveCallback;
 import com.mobillium.bukoliandroidsdk.utils.DialogHelper;
 import com.mobillium.bukoliandroidsdk.utils.MyVolley;
+import com.mobillium.bukoliandroidsdk.webservice.ServiceCallback;
+import com.mobillium.bukoliandroidsdk.webservice.ServiceException;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -41,6 +55,10 @@ public class Bukoli {
     static String url = "http://bukoli.mobillium.com/integration/";
     static Bukoli instance = null;
     static String bukoliapiKey;
+    static String bukoliapiToken;
+    static String userCode;
+    static String phone;
+    static String email;
     static Context applicationContext;
     static MyVolley myVolley;
     static Gson gson;
@@ -61,7 +79,15 @@ public class Bukoli {
 
     SelectPointCallBack callBack;
     InfoCallback infoCallback;
+    CheckPointCallback checkPointCallback;
 
+    public CheckPointCallback getCheckPointCallback() {
+        return checkPointCallback;
+    }
+
+    public void setCheckPointCallback(CheckPointCallback checkPointCallback) {
+        this.checkPointCallback = checkPointCallback;
+    }
 
     private Bukoli() {
         myVolley = new MyVolley(applicationContext);
@@ -109,6 +135,30 @@ public class Bukoli {
     }
 
     /**
+     * This function sets user data and makes request for getting token from webservice
+     *
+     * @param userCode The uniqe identification value for each user. Cannot be null
+     * @param email    String value includes e-mail address of user. Can be null.
+     * @param phone    String value includes phone number of user. Can be null.
+     */
+    public void setUser(@NonNull String userCode, @Nullable String email, @Nullable String phone) {
+        if (!sdkInitialized) {
+            throw new BukoliSdkNotInitializedException("You must initialize the Bukoli SDK first");
+        }
+
+        if (TextUtils.isEmpty(userCode)) {
+            throw new BukoliException("UserCode must not be null!");
+        }
+
+        this.userCode = userCode;
+        this.email = email;
+        this.phone = phone;
+
+
+    }
+
+
+    /**
      * This function creates and shows info dialog
      *
      * @param activity The activity context
@@ -123,6 +173,36 @@ public class Bukoli {
         DialogHelper.showInfoDialog(activity, modelLocation, callback);
 
     }
+
+    /**
+     * This function creates and shows Bukoli point is active or not dialog
+     *
+     * @param activity The activity context
+     * @param callback The callback that will be called when the dialog is opened and closed. Can be null.
+     */
+    public void showIsActiveDialog(Activity activity, @Nullable final CheckPointCallback callback) {
+        if (!sdkInitialized) {
+            throw new BukoliSdkNotInitializedException("You must initialize the Bukoli SDK first");
+        }
+        this.checkPointCallback = callback;
+        DialogHelper.showActivityCheckDialog(activity, new DialogActiveCallback() {
+            @Override
+            public void pressed(int whichButton, String code, ServiceCallback serviceCallback) {
+                if (!TextUtils.isEmpty(code)) {
+                    makeIsActiveRequest(code,serviceCallback);
+                } else {
+
+                }
+            }
+
+            @Override
+            public void dismissed() {
+                Bukoli.getInstance().getCheckPointCallback().onDismiss();
+            }
+        });
+
+    }
+
 
     /**
      * This function opens the Point selection activity
@@ -146,7 +226,7 @@ public class Bukoli {
         return bukoliapiKey;
     }
 
-    static Gson getGson() {
+    public static Gson getGson() {
         if (gson == null) {
             gson = new Gson();
         }
@@ -351,6 +431,66 @@ public class Bukoli {
     public boolean getSharedPref() {
         SharedPreferences saveData = applicationContext.getSharedPreferences(SHARED_PREF, MODE_PRIVATE);
         return saveData.getBoolean("swipe", false);
+    }
+
+
+    private PackageInfo getPackageInfo() {
+        try {
+            return applicationContext.getPackageManager().getPackageInfo(applicationContext.getPackageName(), 0);
+
+        } catch (PackageManager.NameNotFoundException ex) {
+            throw new BukoliException("Package Name Not found");
+        }
+    }
+
+    String getApiToken() {
+        if (TextUtils.isEmpty(bukoliapiToken)) {
+            return "";
+        }
+        return bukoliapiToken;
+    }
+
+
+    void getTokenRequest(final AuthorizeCallback authorizeCallback) {
+        Map<String, String> params = new HashMap<>();
+        params.put("user_code", userCode);
+        params.put("os_version", Build.VERSION.RELEASE);
+        params.put("app_version", getPackageInfo().versionName);
+        params.put("app_build", "" + getPackageInfo().versionCode);
+        params.put("sdk_version", BukoliSdkVersion.BUILD);
+        params.put("brand", Build.BRAND);
+        params.put("model", Build.MODEL);
+
+
+        if (!TextUtils.isEmpty(email)) {
+            params.put("email", email);
+
+        }
+        if (!TextUtils.isEmpty(phone)) {
+            params.put("phone", phone);
+
+        }
+
+
+        ServiceOperations.serviceReq(applicationContext, Request.Method.POST, "authorize", params, new ServiceCallback() {
+            @Override
+            public void done(String result, ServiceException e) {
+                if (e == null) {
+                    ResponseAuthorize responseAuthorize = getGson().fromJson(result, ResponseAuthorize.class);
+                    bukoliapiToken = responseAuthorize.getToken();
+                    authorizeCallback.onSuccess();
+                } else {
+                    authorizeCallback.onFailure();
+                    throw new BukoliException("Cannot aouthorize, check your parameters!");
+                }
+            }
+        });
+    }
+
+
+    void makeIsActiveRequest(String id, ServiceCallback serviceCallback) {
+        Map<String, String> params = new HashMap<>();
+        ServiceOperations.serviceReq(applicationContext, Request.Method.GET, "point/" + id, params,serviceCallback);
     }
 }
 
