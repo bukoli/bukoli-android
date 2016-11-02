@@ -87,6 +87,7 @@ import java.util.Map;
 
 import static com.mobillium.bukoliandroidsdk.Bukoli.TYPE_LIST;
 import static com.mobillium.bukoliandroidsdk.Bukoli.TYPE_MAP;
+import static com.mobillium.bukoliandroidsdk.Bukoli.applicationContext;
 import static com.mobillium.bukoliandroidsdk.R.id.map;
 
 
@@ -140,6 +141,7 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
     boolean canmakeSearch = true;
 //    boolean isUserInteraction = true;
 
+    String currentlySelectedPhone = "";
     BukoliPoint currentlySelectedPoint = null;
     int currentlySelectedPointIndex;
 
@@ -572,14 +574,20 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
                                 }
 
                                 @Override
-                                public void pressed(int whichButton, String takip, String siparis) {
+                                public void pressed(int whichButton, String phoneNumber, String siparis) {
 
-                                    if (TextUtils.isEmpty(takip)) {
+                                    if (TextUtils.isEmpty(phoneNumber)) {
                                         refreshPins();
                                     } else {
+                                        currentlySelectedPhone = phoneNumber;
                                         currentlySelectedPoint = bukoliPoints.get(position);
-                                        Bukoli.getInstance().getCallBack().onSuccess(currentlySelectedPoint, takip);
+                                        Bukoli.getInstance().getCallBack().onSuccess(currentlySelectedPoint, currentlySelectedPhone);
+                                        selectPointRequest();
+
+                                        //finish progress
                                         finish();
+
+
                                     }
                                 }
 
@@ -605,6 +613,7 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
                 } else {
                     currentlySelectedPoint = bukoliPoints.get(position);
                     Bukoli.getInstance().getCallBack().onSuccess(currentlySelectedPoint, null);
+                    selectPointRequest();
                     finish();
 
                 }
@@ -697,6 +706,20 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
                 }
             }
         };
+    }
+
+
+    private void selectPointRequest() {
+        Map<String, String> params = new HashMap<String, String>();
+        if (!TextUtils.isEmpty(currentlySelectedPhone)) {
+            params.put("phone", currentlySelectedPhone);
+        }
+        ServiceOperations.serviceReq(applicationContext, Request.Method.POST, "point/" + currentlySelectedPoint.getId() + "/send", params, new ServiceCallback() {
+            @Override
+            public void done(String result, ServiceException e) {
+                //Do nothing at background
+            }
+        });
     }
 
     @Override
@@ -1126,6 +1149,7 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
                 Bukoli.getInstance().getCallBack().onCancel();
             } else {
                 Bukoli.getInstance().getCallBack().onError(currentlySelectedPoint);
+                selectPointRequest();
             }
             super.onBackPressed();
         }
@@ -1246,19 +1270,21 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        DialogHelper.showPhoneNumberDialog(ActivitySelectPoint.this,  new DialogCallback() {
+                        DialogHelper.showPhoneNumberDialog(ActivitySelectPoint.this, new DialogCallback() {
                             @Override
                             public void pressed(int whichButton) {
 
                             }
 
                             @Override
-                            public void pressed(int whichButton, String takip, String siparis) {
+                            public void pressed(int whichButton, String phoneNumber, String siparis) {
 
-                                if (TextUtils.isEmpty(takip)) {
+                                if (TextUtils.isEmpty(phoneNumber)) {
                                     refreshPins();
                                 } else {
-                                    Bukoli.getInstance().getCallBack().onSuccess(currentlySelectedPoint, takip);
+                                    currentlySelectedPhone = phoneNumber;
+                                    Bukoli.getInstance().getCallBack().onSuccess(currentlySelectedPoint, currentlySelectedPhone);
+                                    selectPointRequest();
                                     finish();
                                 }
                             }
@@ -1282,6 +1308,7 @@ public class ActivitySelectPoint extends BaseActivity implements OnMapReadyCallb
                 }, 500);
             } else {
                 Bukoli.getInstance().getCallBack().onSuccess(currentlySelectedPoint, null);
+                selectPointRequest();
                 finish();
             }
         }

@@ -48,6 +48,10 @@ public class BukoliEditText extends AppCompatEditText {
 
 
     public String getOnlyNumberText() {
-        return getText().toString().replace("(", "").replace(")", "").replace(" ", "");
+        return removeFirst(getText().toString().replace("(", "").replace(")", "").replace(" ", ""));
+    }
+
+    public String removeFirst(String s) {
+        return s.substring(1);
     }
 }

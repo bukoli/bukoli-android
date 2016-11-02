@@ -265,7 +265,7 @@ public class DialogHelper {
         btSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!TextUtils.isEmpty(etDialogTakip.getOnlyNumberText()) && etDialogTakip.getOnlyNumberText().length() == 11) {
+                if (!TextUtils.isEmpty(etDialogTakip.getOnlyNumberText()) && etDialogTakip.getOnlyNumberText().length() == 10) {
                     callback.pressed(POSITIVE_BUTTON, etDialogTakip.getOnlyNumberText(), "");
                     dialog.dismiss();
                 } else {
