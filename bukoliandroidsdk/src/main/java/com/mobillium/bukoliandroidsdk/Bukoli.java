@@ -16,15 +16,15 @@ import android.util.TypedValue;
 import com.android.volley.Request;
 import com.google.gson.Gson;
 import com.mobillium.bukoliandroidsdk.callback.AuthorizeCallback;
-import com.mobillium.bukoliandroidsdk.callback.CheckPointCallback;
 import com.mobillium.bukoliandroidsdk.callback.InfoCallback;
+import com.mobillium.bukoliandroidsdk.callback.PointStatusCallback;
 import com.mobillium.bukoliandroidsdk.callback.SelectPointCallBack;
 import com.mobillium.bukoliandroidsdk.models.BukoliLocation;
+import com.mobillium.bukoliandroidsdk.models.BukoliPoint;
 import com.mobillium.bukoliandroidsdk.models.DialogModel;
 import com.mobillium.bukoliandroidsdk.models.ResponseAuthorize;
 import com.mobillium.bukoliandroidsdk.utils.BukoliException;
 import com.mobillium.bukoliandroidsdk.utils.BukoliSdkNotInitializedException;
-import com.mobillium.bukoliandroidsdk.utils.DialogActiveCallback;
 import com.mobillium.bukoliandroidsdk.utils.DialogHelper;
 import com.mobillium.bukoliandroidsdk.utils.MyVolley;
 import com.mobillium.bukoliandroidsdk.webservice.ServiceCallback;
@@ -79,14 +79,14 @@ public class Bukoli {
 
     SelectPointCallBack callBack;
     InfoCallback infoCallback;
-    CheckPointCallback checkPointCallback;
+    PointStatusCallback pointStatusCallback;
 
-    public CheckPointCallback getCheckPointCallback() {
-        return checkPointCallback;
+    public PointStatusCallback getPointStatusCallback() {
+        return pointStatusCallback;
     }
 
-    public void setCheckPointCallback(CheckPointCallback checkPointCallback) {
-        this.checkPointCallback = checkPointCallback;
+    public void setPointStatusCallback(PointStatusCallback pointStatusCallback) {
+        this.pointStatusCallback = pointStatusCallback;
     }
 
     private Bukoli() {
@@ -175,31 +175,45 @@ public class Bukoli {
     }
 
     /**
-     * This function creates and shows Bukoli point is active or not dialog
+     * This function makes a request for checking the Bukoli Point is active or not and return its current status
      *
-     * @param activity The activity context
-     * @param callback The callback that will be called when the dialog is opened and closed. Can be null.
+     * @param code The TDR Code wanted to be checked
+     * @param callback The callback that will be called when webservice respond to request. Can be null.
      */
-    public void showIsActiveDialog(Activity activity, @Nullable final CheckPointCallback callback) {
+    public void checkPointStatus(String code, @NonNull final PointStatusCallback callback) {
         if (!sdkInitialized) {
             throw new BukoliSdkNotInitializedException("You must initialize the Bukoli SDK first");
         }
-        this.checkPointCallback = callback;
-        DialogHelper.showActivityCheckDialog(activity, new DialogActiveCallback() {
-            @Override
-            public void pressed(int whichButton, String code, ServiceCallback serviceCallback) {
-                if (!TextUtils.isEmpty(code)) {
-                    makeIsActiveRequest(code,serviceCallback);
-                } else {
 
+        if(callback==null){
+            throw new BukoliException("Callback cannot be null");
+        }
+
+        this.pointStatusCallback = callback;
+
+        if (!TextUtils.isEmpty(code)) {
+            makeIsActiveRequest(code, new ServiceCallback() {
+                @Override
+                public void done(String result, ServiceException e) {
+                    if (e == null) {
+
+                        BukoliPoint selectedPoint = Bukoli.getInstance().getGson().fromJson(result, BukoliPoint.class);
+                        if (selectedPoint.isActive()) {
+                            pointStatusCallback.active(selectedPoint);
+
+                        } else {
+                            pointStatusCallback.passive(selectedPoint);
+
+                        }
+                    } else {
+                        pointStatusCallback.onError();
+                    }
                 }
-            }
+            });
+        } else {
+            throw new BukoliException("You must enter a TDR Code");
+        }
 
-            @Override
-            public void dismissed() {
-                Bukoli.getInstance().getCheckPointCallback().onDismiss();
-            }
-        });
 
     }
 
@@ -490,7 +504,7 @@ public class Bukoli {
 
     void makeIsActiveRequest(String id, ServiceCallback serviceCallback) {
         Map<String, String> params = new HashMap<>();
-        ServiceOperations.serviceReq(applicationContext, Request.Method.GET, "point/" + id, params,serviceCallback);
+        ServiceOperations.serviceReq(applicationContext, Request.Method.GET, "point/" + id, params, serviceCallback);
     }
 }
 

@@ -8,6 +8,7 @@ import android.graphics.drawable.StateListDrawable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.StateSet;
 import android.view.View;
 import android.view.Window;
@@ -23,12 +24,11 @@ import com.bumptech.glide.Glide;
 import com.mobillium.bukoliandroidsdk.Bukoli;
 import com.mobillium.bukoliandroidsdk.R;
 import com.mobillium.bukoliandroidsdk.callback.InfoCallback;
+import com.mobillium.bukoliandroidsdk.callback.PointStatusCallback;
 import com.mobillium.bukoliandroidsdk.models.BukoliPoint;
 import com.mobillium.bukoliandroidsdk.models.DialogModel;
 import com.mobillium.bukoliandroidsdk.models.DialogPointModel;
 import com.mobillium.bukoliandroidsdk.ui.customview.BukoliEditText;
-import com.mobillium.bukoliandroidsdk.webservice.ServiceCallback;
-import com.mobillium.bukoliandroidsdk.webservice.ServiceException;
 
 
 /**
@@ -295,7 +295,7 @@ public class DialogHelper {
     }
 
 
-    public static void showActivityCheckDialog(final Context context, final DialogActiveCallback callback) {
+    public static void showActivityCheckDialog(final Context context, final PointStatusCallback callback) {
 
         dismissCurrentDialog();
         //Initialise Dialog
@@ -338,25 +338,35 @@ public class DialogHelper {
             @Override
             public void onClick(View v) {
                 if (!TextUtils.isEmpty(etDialogTakip.getText().toString()) && etDialogTakip.getText().toString().length() == 8) {
-                    progressLayout.setVisibility(View.VISIBLE);
-                    callback.pressed(POSITIVE_BUTTON, etDialogTakip.getText().toString(), new ServiceCallback() {
+                    Bukoli.getInstance().checkPointStatus(etDialogTakip.getText().toString(), new PointStatusCallback() {
                         @Override
-                        public void done(String result, ServiceException e) {
+                        public void active(BukoliPoint selectedPoint) {
                             progressLayout.setVisibility(View.GONE);
-                            if (e == null) {
-                                resultLayout.setVisibility(View.VISIBLE);
-                                BukoliPoint selectedPoint = Bukoli.getInstance().getGson().fromJson(result, BukoliPoint.class);
-                                Bukoli.getInstance().getCheckPointCallback().isActive(selectedPoint.isActive());
-                                if(selectedPoint.isActive()){
-                                    tvDialogResult.setText(selectedPoint.getName() +" adlı Bukoli noktası aktiftir.");
-                                }else{
-                                    tvDialogResult.setText(selectedPoint.getName() +" adlı Bukoli noktası aktif değildir.");
-                                }
-                            } else {
-                                Bukoli.getInstance().getCheckPointCallback().onError();
-                            }
+                            resultLayout.setVisibility(View.VISIBLE);
+                            tvDialogResult.setText(selectedPoint.getName() +" adlı Bukoli noktası aktiftir.");
+                            callback.active(selectedPoint);
+                            Log.d("BUKOLI", "Point is active");
+                        }
+
+                        @Override
+                        public void passive(BukoliPoint selectedPoint) {
+                            progressLayout.setVisibility(View.GONE);
+                            resultLayout.setVisibility(View.VISIBLE);
+                            tvDialogResult.setText(selectedPoint.getName() +" adlı Bukoli noktası aktif değildir.");
+                            callback.passive(selectedPoint);
+                            Log.d("BUKOLI", "Point is not active");
+                        }
+
+                        @Override
+                        public void onError() {
+                            progressLayout.setVisibility(View.GONE);
+                            resultLayout.setVisibility(View.VISIBLE);
+                            tvDialogResult.setText("Nokta bulunamadı.");
+                            callback.onError();
+                            Log.d("BUKOLI", "Point not found");
                         }
                     });
+
 
                 } else {
                     Toast.makeText(context, context.getString(R.string.sdk_code_missing_error), Toast.LENGTH_SHORT).show();
@@ -374,7 +384,6 @@ public class DialogHelper {
         btClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                callback.pressed(NEGATIVE_BUTTON, "",null);
                 dialog.dismiss();
             }
         });
@@ -383,17 +392,10 @@ public class DialogHelper {
         ivIconItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                callback.pressed(NEGATIVE_BUTTON, "",null);
                 dialog.dismiss();
             }
         });
 
-        dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-            @Override
-            public void onCancel(DialogInterface dialogInterface) {
-                callback.pressed(NEGATIVE_BUTTON, "",null);
-            }
-        });
         //Show Dialog
         dialog.show();
 

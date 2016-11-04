@@ -88,6 +88,18 @@ import com.mobillium.bukoliandroidsdk.Bukoli;
 Bukoli.sdkInitialize(getApplicationContext(), "your api key");
 ```
 
+### Set User Data
+Call setUser() method after initialize  SDK
+First parameter is User Code
+Second parameter is E-mail address of User
+Third parameter is Phone Number of User
+```java
+import com.mobillium.bukoliandroidsdk.Bukoli;
+
+Bukoli.sdkInitialize(getApplicationContext(), "your api key");
+Bukoli.getInstance().setUser("1234", "sample@mail.com", "5551234567");
+```
+
 ### Enable Debug
 To enable debugging logs, you need to call setDebugEnabled(boolean) method.
 ```java
@@ -172,6 +184,32 @@ Bukoli.getInstance().showInfoDialog(MainActivity.this, new InfoCallback() {
         });
 ```
 
+### Bukoli Check Point Status
+
+First parameter is Point Code to be checked.
+Second parameter is callback for point status.
+
+```java
+import com.mobillium.bukoliandroidsdk.Bukoli;
+import com.mobillium.bukoliandroidsdk.callback.PointStatusCallback;
+
+Bukoli.getInstance().checkPointStatus("TDR-1234", new PointStatusCallback() {
+            @Override
+            public void active(BukoliPoint point) {
+                Log.d("BUKOLI", "Point is active");
+            }
+
+            @Override
+            public void passive(BukoliPoint point) {
+                Log.d("BUKOLI", "Point is not active");
+            }
+
+            @Override
+            public void onError() {
+                Log.d("BUKOLI", "Point not found");
+            }
+        });
+```
 
 License
 ====================

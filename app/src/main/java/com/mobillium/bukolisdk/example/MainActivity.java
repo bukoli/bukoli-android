@@ -10,10 +10,11 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.mobillium.bukoliandroidsdk.Bukoli;
-import com.mobillium.bukoliandroidsdk.callback.CheckPointCallback;
 import com.mobillium.bukoliandroidsdk.callback.InfoCallback;
+import com.mobillium.bukoliandroidsdk.callback.PointStatusCallback;
 import com.mobillium.bukoliandroidsdk.callback.SelectPointCallBack;
 import com.mobillium.bukoliandroidsdk.models.BukoliPoint;
+import com.mobillium.bukoliandroidsdk.utils.DialogHelper;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -76,30 +77,46 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void openCheckDialog() {
-        Bukoli.getInstance().showIsActiveDialog(this, new CheckPointCallback() {
-            @Override
-            public void isActive(boolean active) {
-                if (active) {
-                    Toast.makeText(MainActivity.this, "Point is Active", Toast.LENGTH_SHORT).show();
 
-                } else {
-                    Toast.makeText(MainActivity.this, "Point is deActive", Toast.LENGTH_SHORT).show();
-                }
+        DialogHelper.showActivityCheckDialog(MainActivity.this, new PointStatusCallback() {
+            @Override
+            public void active(BukoliPoint point) {
+                Log.d("BUKOLI", "Point is active");
             }
 
             @Override
-            public void onDismiss() {
-
-            }
-
-            @Override
-            public void onDisplay() {
-
+            public void passive(BukoliPoint point) {
+                Log.d("BUKOLI", "Point is not active");
             }
 
             @Override
             public void onError() {
+                Log.d("BUKOLI", "Point not found");
+            }
+        });
 
+
+    }
+
+
+    private void checkStatusControl(){
+        //Example for background status control process
+        //Never used in Sample app
+
+        Bukoli.getInstance().checkPointStatus("TDR-0479", new PointStatusCallback() {
+            @Override
+            public void active(BukoliPoint point) {
+                Log.d("BUKOLI", "Point is active");
+            }
+
+            @Override
+            public void passive(BukoliPoint point) {
+                Log.d("BUKOLI", "Point is not active");
+            }
+
+            @Override
+            public void onError() {
+                Log.d("BUKOLI", "Point not found");
             }
         });
     }
