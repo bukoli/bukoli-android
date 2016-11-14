@@ -35,7 +35,7 @@ You can use Gradle or Maven to add the library as aar dependency to your build.
 <dependency>
   <groupId>com.mobillium.bukoliandroidsdk</groupId>
   <artifactId>bukoliandroidsdk</artifactId>
-  <version>1.0.10</version>
+  <version>1.1.2</version>
   <type>pom</type>
 </dependency>
 ```
