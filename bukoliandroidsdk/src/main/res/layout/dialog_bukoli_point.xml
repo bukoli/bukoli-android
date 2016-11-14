@@ -127,7 +127,7 @@
         android:layout_marginTop="5dp"
         android:background="@color/bukoliYellow"
         android:gravity="center"
-        android:text="Bu Adrese Gönder"
+        android:text="Bu Noktaya Gönder"
         android:textColor="@color/white" />
 
 

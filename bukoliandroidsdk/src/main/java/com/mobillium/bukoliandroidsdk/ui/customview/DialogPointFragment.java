@@ -94,6 +94,7 @@ public class DialogPointFragment extends DialogFragment implements DialogInterfa
                 DialogPointFragment.this.dismiss();
             }
         });
+
         viewPager.setAdapter(adapterPointFragments);
         viewPager.setCurrentItem(position);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {

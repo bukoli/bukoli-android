@@ -337,13 +337,16 @@ public class DialogHelper {
         btSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+
                 if (!TextUtils.isEmpty(etDialogTakip.getText().toString()) && etDialogTakip.getText().toString().length() == 8) {
+                    progressLayout.setVisibility(View.VISIBLE);
                     Bukoli.getInstance().checkPointStatus(etDialogTakip.getText().toString(), new PointStatusCallback() {
                         @Override
                         public void active(BukoliPoint selectedPoint) {
                             progressLayout.setVisibility(View.GONE);
                             resultLayout.setVisibility(View.VISIBLE);
-                            tvDialogResult.setText(selectedPoint.getName() +" adlı Bukoli noktası aktiftir.");
+                            tvDialogResult.setText(selectedPoint.getName() + " adlı Bukoli noktası aktiftir.");
                             callback.active(selectedPoint);
                             Log.d("BUKOLI", "Point is active");
                         }
@@ -352,7 +355,7 @@ public class DialogHelper {
                         public void passive(BukoliPoint selectedPoint) {
                             progressLayout.setVisibility(View.GONE);
                             resultLayout.setVisibility(View.VISIBLE);
-                            tvDialogResult.setText(selectedPoint.getName() +" adlı Bukoli noktası aktif değildir.");
+                            tvDialogResult.setText(selectedPoint.getName() + " adlı Bukoli noktası aktif değildir.");
                             callback.passive(selectedPoint);
                             Log.d("BUKOLI", "Point is not active");
                         }
@@ -369,6 +372,7 @@ public class DialogHelper {
 
 
                 } else {
+
                     Toast.makeText(context, context.getString(R.string.sdk_code_missing_error), Toast.LENGTH_SHORT).show();
                 }
             }

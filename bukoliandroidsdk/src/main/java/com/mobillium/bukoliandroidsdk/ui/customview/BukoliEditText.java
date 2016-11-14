@@ -3,6 +3,7 @@ package com.mobillium.bukoliandroidsdk.ui.customview;
 
 import android.content.Context;
 import android.support.v7.widget.AppCompatEditText;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 
 import com.mobillium.bukoliandroidsdk.utils.patternedtextwatcher.PatternedTextWatcher;
@@ -52,6 +53,9 @@ public class BukoliEditText extends AppCompatEditText {
     }
 
     public String removeFirst(String s) {
+        if(TextUtils.isEmpty(s)){
+            return "";
+        }
         return s.substring(1);
     }
 }

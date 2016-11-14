@@ -21,7 +21,7 @@
 
     <!--Toast Messages-->
     <string name="sdk_number_missing_error">Lütfen numara alanını doldurunuz.</string>
-    <string name="sdk_code_missing_error">Lütfen TDR kodu alanını doldurunuz.</string>
+    <string name="sdk_code_missing_error">Lütfen TDR kodu alanını eksiksiz doldurunuz.</string>
     <string name="sdk_webservice_connection_error">Lütfen Internet bağlantınızı kontrol ediniz.</string>
     <string name="sdk_webservice_response_error">Bir hata oluştu, lütfen tekrar deneyiniz.</string>
 

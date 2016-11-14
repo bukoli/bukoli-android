@@ -4,11 +4,6 @@
     android:layout_height="match_parent"
     android:background="@android:color/transparent">
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/vpPoints"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-
     <ImageView
         android:id="@+id/ivSwipeItem"
         android:layout_width="100dp"
@@ -18,5 +13,16 @@
         android:layout_marginBottom="30dp"
         android:src="@drawable/icon_swipe"
         android:visibility="visible" />
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/vpPoints"
+        android:layout_width="match_parent"
+        android:paddingLeft="@dimen/pager_padding"
+        android:paddingRight="@dimen/pager_padding"
+        android:clipToPadding="false"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
 </RelativeLayout>
