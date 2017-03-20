@@ -1,7 +1,6 @@
 package com.mobillium.bukoliandroidsdk.ui.customview;
 
 import android.content.Context;
-import android.support.design.internal.ForegroundLinearLayout;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
