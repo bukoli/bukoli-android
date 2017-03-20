@@ -21,5 +21,5 @@
 package com.mobillium.bukoliandroidsdk;
 
 final class BukoliSdkVersion {
-    public static final String BUILD = "1.1.3";
+    public static final String BUILD = "1.1.4";
 }
