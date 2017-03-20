@@ -52,7 +52,7 @@ public class Bukoli {
 
     static final String SHARED_PREF = "BUKOLI";
 
-    static String url = "http://bukoli.mobillium.com/integration/";
+    static String url = "https://api.bukoli.com/integration/";
     static Bukoli instance = null;
     static String bukoliapiKey;
     static String bukoliapiToken;
